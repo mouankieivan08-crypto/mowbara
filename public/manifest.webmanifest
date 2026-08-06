@@ -1,22 +1,18 @@
 {
-  "name": "Espace Info",
-  "short_name": "Espace Info",
-  "description": "Portail d'informations et d'actualités locales",
-  "start_url": "/",
+  "name": "Mwaebara",
+  "short_name": "Mwaebara",
+  "start_url": "/a",
+  "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#FBF8F4",
-  "theme_color": "#1E4B4A",
+  "theme_color": "#FBF8F4",
+  "lang": "fr",
+  "dir": "ltr",
+  "prefer_related_applications": false,
   "icons": [
-    {
-      "src": "/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
+    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ]
 }
