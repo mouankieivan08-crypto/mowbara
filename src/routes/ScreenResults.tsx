@@ -60,8 +60,8 @@ export const ScreenResults: React.FC = () => {
   };
 
   return (
-    <div className="flex-1 flex flex-col justify-between p-20 select-none bg-fond-base overflow-y-auto">
-      <div className="flex flex-col gap-24 mt-8">
+    <div className="flex-1 flex flex-col justify-between select-none bg-fond-base">
+      <div className="flex flex-col gap-24">
         <div className="flex flex-col gap-8 pb-12 border-b border-bordure">
           <span className="text-xs font-bold uppercase tracking-wider text-encre-douce">
             {t('results.category_detected')}

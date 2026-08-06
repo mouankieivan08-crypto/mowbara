@@ -89,8 +89,8 @@ export const ScreenAnalysis: React.FC = () => {
 
   if (errorState) {
     return (
-      <div className="flex-1 flex flex-col justify-between p-20 select-none bg-fond-base">
-        <div className="flex flex-col gap-24 mt-24 text-center">
+      <div className="flex-1 flex flex-col justify-between select-none bg-fond-base">
+        <div className="flex flex-col gap-24 text-center">
           <h2 className="font-titres text-xl font-bold text-danger">
             {t('error.title')}
           </h2>
@@ -134,8 +134,8 @@ export const ScreenAnalysis: React.FC = () => {
   }
 
   return (
-    <div className="flex-1 flex flex-col justify-between p-20 select-none bg-fond-base">
-      <div className="flex flex-col gap-24 mt-24">
+    <div className="flex-1 flex flex-col justify-between select-none bg-fond-base">
+      <div className="flex flex-col gap-24">
         <h2 className="font-titres text-xl font-bold text-encre-forte text-center">
           {t('analysis.processing')}
         </h2>

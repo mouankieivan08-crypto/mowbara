@@ -237,11 +237,11 @@ export const ScreenHome: React.FC = () => {
             </button>
           </div>
 
-          <div className="grid grid-cols-2 gap-12">
+          <div className="grid grid-cols-1 min-[400px]:grid-cols-2 gap-12">
             {/* Ma situation personnelle (Texte libre) */}
             <div
               onClick={() => setInfosView('text-libre')}
-              className="col-span-2 bg-fond-encart border border-primaire/20 rounded-lg p-16 shadow-xs active:bg-fond-encart/80 cursor-pointer flex flex-col justify-between h-[120px]"
+              className="col-span-1 min-[400px]:col-span-2 bg-fond-encart border border-primaire/20 rounded-lg p-16 shadow-xs active:bg-fond-encart/80 cursor-pointer flex flex-col justify-between h-[120px]"
             >
               <div className="flex justify-between items-start">
                 <span className="text-[10px] font-bold text-primaire uppercase">Texte Libre</span>

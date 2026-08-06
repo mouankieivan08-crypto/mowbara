@@ -85,8 +85,8 @@ export const ScreenCarnet: React.FC = () => {
   // 1. CAR-0 : Carnet désactivé (état par défaut)
   if (!carnetActif) {
     return (
-      <div className="flex-1 flex flex-col justify-between p-20 bg-fond-base min-h-full">
-        <div className="flex flex-col gap-24 mt-8">
+      <div className="flex-1 flex flex-col justify-between bg-fond-base min-h-full">
+        <div className="flex flex-col gap-16 text-center max-w-[320px] mx-auto">
           <div className="flex flex-col gap-8">
             <h2 className="font-titres text-xl font-bold text-encre-forte">
               Carnet de faits et de preuves

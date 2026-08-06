@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import { AppStateProvider } from './AppStateContext';
+import { logger } from './logger';
 import './i18n';
 import './index.css';
 
@@ -10,10 +11,10 @@ if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js')
       .then((registration) => {
-        console.log('ServiceWorker enregistré avec succès : ', registration.scope);
+        logger.info('ServiceWorker enregistré avec succès', { scope: registration.scope });
       })
       .catch((err) => {
-        console.error('Échec de l\'enregistrement du ServiceWorker : ', err);
+        logger.error('Échec de l\'enregistrement du ServiceWorker', err);
       });
   });
 }

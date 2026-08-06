@@ -9,8 +9,8 @@ export const ScreenAbout: React.FC = () => {
   const { setCurrentScreen } = useAppState();
 
   return (
-    <div className="flex-1 flex flex-col justify-between p-20 select-none bg-fond-base overflow-y-auto">
-      <div className="flex flex-col gap-24 mt-8">
+    <div className="flex-1 flex flex-col justify-between select-none bg-fond-base">
+      <div className="flex flex-col gap-24">
         <div className="flex items-center justify-between border-b border-bordure pb-12">
           <h2 className="font-titres text-xl font-bold text-encre-forte">
             {t('about.title')}

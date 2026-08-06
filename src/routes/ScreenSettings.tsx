@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppState } from '../AppStateContext';
 import { exitQuickly } from '../exit';
+import { hashPin } from '../services/pinCrypto';
 import { Bouton } from '../components/Bouton';
 import { Modale } from '../components/Modale';
 
 export const ScreenSettings: React.FC = () => {
   const { t } = useTranslation();
-  const { textSize, setTextSize, setCurrentScreen, setPinHash, setCarnetActif } = useAppState();
+  const { textSize, setTextSize, setCurrentScreen, setPinHash, setCarnetActif, setInputText } = useAppState();
 
   const [activeModal, setActiveModal] = useState<'pin' | 'leurre' | 'taille' | 'langue' | 'effacer_carnet' | 'tout_effacer' | null>(null);
 
@@ -71,6 +72,55 @@ export const ScreenSettings: React.FC = () => {
               <span className="text-encre-douce text-lg font-bold">›</span>
             </div>
           ))}
+        </div>
+
+        {/* Section Démo - États du MVP */}
+        <div className="flex flex-col gap-12 mt-24 p-16 border border-dashed border-accent/40 rounded-lg bg-accent/5">
+          <span className="text-xs font-bold text-accent uppercase tracking-wider block">
+            🧪 Outils de Démonstration (MVP States)
+          </span>
+          <p className="text-xs text-encre-douce leading-relaxed">
+            Utilisez ces raccourcis pour charger instantanément les 4 états clés demandés de l'application :
+          </p>
+          <div className="grid grid-cols-2 gap-8">
+            <button
+              onClick={() => {
+                localStorage.removeItem('pin_hash');
+                setPinHash(null);
+                setCurrentScreen('s1_pin');
+              }}
+              className="px-12 py-8 bg-fond-carte border border-bordure rounded-md text-xs font-bold text-encre-forte active:bg-fond-encart"
+            >
+              1. Lancement (Création)
+            </button>
+            <button
+              onClick={async () => {
+                const fakeHash = await hashPin('1234');
+                setPinHash(fakeHash);
+                setCurrentScreen('s1_pin');
+              }}
+              className="px-12 py-8 bg-fond-carte border border-bordure rounded-md text-xs font-bold text-encre-forte active:bg-fond-encart"
+            >
+              2. Login / Verrou
+            </button>
+            <button
+              onClick={() => {
+                setCurrentScreen('s3_analysis');
+              }}
+              className="px-12 py-8 bg-fond-carte border border-bordure rounded-md text-xs font-bold text-encre-forte active:bg-fond-encart"
+            >
+              3. Analyse (Chargement)
+            </button>
+            <button
+              onClick={() => {
+                setInputText('force_error');
+                setCurrentScreen('s3_analysis');
+              }}
+              className="px-12 py-8 bg-fond-carte border border-bordure rounded-md text-xs font-bold text-danger active:bg-danger/10"
+            >
+              4. Erreur Technique
+            </button>
+          </div>
         </div>
       </div>
 
