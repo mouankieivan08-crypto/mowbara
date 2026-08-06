@@ -1,0 +1,34 @@
+[
+  {
+    "id": "117",
+    "nom": "Police Nationale (Secours)",
+    "numero": "117",
+    "type": "urgence",
+    "statut_verification": "verifie",
+    "description": "Numéro d'appel d'urgence de la police nationale pour signaler une agression ou un danger de mort immédiat."
+  },
+  {
+    "id": "1444",
+    "nom": "Numéro National d'Écoute et d'Orientation",
+    "numero": "1444",
+    "type": "aide",
+    "statut_verification": "verifie",
+    "description": "Numéro d'écoute national anonyme et gratuit d'orientation pour les femmes victimes de violences."
+  },
+  {
+    "id": "afjc",
+    "nom": "Association des Femmes Juristes du Congo",
+    "numero": "+242066601444",
+    "type": "juridique",
+    "statut_verification": "verifie",
+    "description": "Assistance juridique gratuite, conseil, accompagnement et défense des droits des femmes et des enfants victimes de violences."
+  },
+  {
+    "id": "mas",
+    "nom": "Ministère des Affaires Sociales (Prise en charge)",
+    "numero": "+242055114444",
+    "type": "social",
+    "statut_verification": "a_verifier",
+    "description": "Services sociaux de l'État pour l'accueil temporaire et l'aide sociale d'urgence aux personnes vulnérables."
+  }
+]

@@ -1,0 +1,23 @@
+[
+  {
+    "id": "violence_domestique",
+    "titre": "Violences Domestiques et Conjugales",
+    "description": "Toute forme de violence physique, psychologique, sexuelle ou économique commise par un conjoint, ex-conjoint ou membre de la famille.",
+    "loi_congolaise": "La loi n° 19-2022 du 4 mai 2022 portant lutte contre les violences faites aux femmes en République du Congo punit sévèrement les violences physiques, morales et économiques au sein du couple.",
+    "peines": "Peines d'emprisonnement de 2 à 5 ans et amendes financières importantes, pouvant être doublées en cas de récidive ou de circonstances aggravantes."
+  },
+  {
+    "id": "agression_sexuelle",
+    "titre": "Agressions Sexuelles et Viol",
+    "description": "Tout acte de nature sexuelle commis avec violence, contrainte, menace ou surprise.",
+    "loi_congolaise": "Le Code pénal congolais et la loi de 2022 répriment le viol comme un crime grave. Le consentement doit être libre et éclairé.",
+    "peines": "Le viol est passible de peines de travaux forcés de 10 à 20 ans. La peine peut être portée à la perpétuité si la victime est mineure ou vulnérable."
+  },
+  {
+    "id": "harcelement",
+    "titre": "Harcèlement et Menaces",
+    "description": "Propos ou comportements répétés ayant pour objet ou pour effet une dégradation des conditions de vie ou de travail, ou menaces physiques.",
+    "loi_congolaise": "La loi n° 19-2022 interdit et sanctionne le harcèlement moral, sexuel ainsi que les menaces de violences physiques ou de mort.",
+    "peines": "Peines d'emprisonnement de 6 mois à 2 ans et amendes."
+  }
+]

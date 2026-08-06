@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+@theme {
+  --color-fond-base: #FBF8F4;
+  --color-fond-carte: #FFFFFF;
+  --color-fond-encart: #F2EDE5;
+  --color-encre-forte: #171C22;
+  --color-encre-douce: #5A6270;
+  --color-primaire: #1E4B4A;
+  --color-primaire-contact: #163A39;
+  --color-accent: #B8722C;
+  --color-danger: #B3261E;
+  --color-attention: #8A6A17;
+  --color-bordure: rgba(23, 28, 34, 0.10);
+  --color-texte-sur-fonce: #FFFFFF;
+
+  --spacing-4: 4px;
+  --spacing-8: 8px;
+  --spacing-12: 12px;
+  --spacing-16: 16px;
+  --spacing-20: 20px;
+  --spacing-24: 24px;
+  --spacing-32: 32px;
+  --spacing-48: 48px;
+  --spacing-64: 64px;
+  --spacing-marge-ecran: 20px;
+
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-full: 9999px;
+
+  --font-titres: Lora, serif;
+  --font-interface: Inter, sans-serif;
+}
+
+@layer base {
+  html, body {
+    background-color: var(--color-fond-base);
+    color: var(--color-encre-forte);
+    font-family: var(--font-interface);
+  }
+}

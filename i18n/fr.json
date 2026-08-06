@@ -1,0 +1,96 @@
+{
+  "translation": {
+    "app_name": "Mwaebara PWA",
+    "exit_quick": "Sortie Rapide",
+    "emergency_call_117": "Appeler le 117 (Urgence)",
+    "emergency_call_1444": "Appeler le 1444 (Écoute)",
+    "pin": {
+      "create_title": "Choisissez un code",
+      "create_subtitle": "Configurez un code PIN à 4 chiffres pour protéger l'accès à l'application.",
+      "confirm_title": "Confirmez votre code",
+      "confirm_subtitle": "Veuillez saisir à nouveau les 4 chiffres de votre code PIN.",
+      "error_mismatch": "Les codes ne correspondent pas. Veuillez recommencer.",
+      "enter_pin": "Saisissez votre code PIN",
+      "skip": "Ignorer le code",
+      "warning_no_recovery": "Aucune récupération possible de votre code. Choisissez un code mémorisable ou ignorez cette étape si vous êtes en urgence.",
+      "locked": "Clavier bloqué pour {{seconds}} secondes suite à de trop nombreux échecs."
+    },
+    "home": {
+      "title": "Votre espace d'aide juridique",
+      "input_placeholder": "Décrivez ce qui s'est passé en quelques phrases...",
+      "analyze_btn": "Analyser la situation",
+      "alert_title": "Danger immédiat ?",
+      "alert_body": "Si vous ou une personne proche êtes en danger de mort, contactez immédiatement les secours.",
+      "disclaimer": "Vos écrits sont analysés uniquement en mémoire locale. Rien n'est enregistré."
+    },
+    "analysis": {
+      "processing": "Analyse en cours...",
+      "processing_sub": "Identification de la catégorie juridique congolaise et des structures d'orientation..."
+    },
+    "results": {
+      "title": "Orientation Juridique",
+      "category_detected": "Catégorie détectée",
+      "confidence_low": "La situation est complexe et l'identification est incertaine. Nous vous conseillons de contacter directement le service d'écoute 1444.",
+      "legal_text": "Que dit la loi congolaise ?",
+      "view_details_btn": "Consulter la loi en détail",
+      "recommended_contacts": "Structures d'aide recommandées",
+      "back_home": "Nouvelle analyse",
+      "call_now": "Appeler direct",
+      "to_verify": "À vérifier",
+      "verified": "Vérifié"
+    },
+    "legal": {
+      "title": "Détail de la Loi",
+      "loi_congolaise": "Loi Congolaise applicable",
+      "peines": "Peines encourues",
+      "back": "Retour"
+    },
+    "emergency": {
+      "title": "Urgence Détectée",
+      "vital_danger": "Danger de mort ou agression imminente",
+      "instructions_title": "Instructions de sécurité",
+      "instruction_1": "Mettez-vous immédiatement en sécurité dans un lieu public ou chez une personne de confiance.",
+      "instruction_2": "Fuyez la zone de danger si cela est possible.",
+      "instruction_3": "Si vous ne pouvez pas parler, tentez d'envoyer un SMS à un proche avec votre position.",
+      "call_police_btn": "Appeler la Police (117)",
+      "call_1444_btn": "Contacter le service d'écoute (1444)",
+      "back_to_app": "Retour à l'accueil"
+    },
+    "directory": {
+      "title": "Répertoire d'aide",
+      "all_contacts": "Toutes les structures d'aide",
+      "filter_all": "Tous",
+      "filter_écoute": "Écoute",
+      "filter_juridique": "Juridique",
+      "filter_social": "Social",
+      "unverified_warning": "Ce numéro n'a pas pu être formellement vérifié récemment. Le bouton d'appel direct est désactivé."
+    },
+    "settings": {
+      "title": "Paramètres",
+      "text_size": "Taille du texte",
+      "size_normal": "Normal",
+      "size_large": "Grand",
+      "size_xlarge": "Très grand",
+      "language": "Langue de l'application",
+      "lang_fr": "Français",
+      "pin_lock": "Verrouillage PIN",
+      "reset_pin_btn": "Réinitialiser/Désactiver le PIN",
+      "pin_disabled_success": "Le code PIN a été désactivé avec succès."
+    },
+    "about": {
+      "title": "À propos",
+      "privacy_policy_title": "Confidentialité et Sécurité",
+      "privacy_policy_body": "Cette application est conçue pour garantir votre sécurité absolue. Vos messages ne quittent jamais la mémoire de votre appareil, ne sont stockés dans aucune base de données ni aucun cache, et ne sont associés à aucun compte ou identifiant personnel. La sortie rapide vous permet d'effacer instantanément toute trace en cours d'utilisation.",
+      "app_version": "Version 1.0.0 (République du Congo)"
+    },
+    "error": {
+      "title": "Erreur technique",
+      "body": "La réponse n'a pas pu être chargée ou une erreur inattendue est survenue.",
+      "retry_btn": "Réessayer",
+      "offline_banner": "Vous êtes actuellement hors-ligne. Les requêtes réseau d'analyse sont désactivées. Vous pouvez toujours contacter les numéros d'urgence de secours.",
+      "restart_app": "Redémarrer l'application",
+      "fallback_title": "Application momentanément indisponible",
+      "fallback_body": "Pour votre sécurité, les numéros d'aide d'urgence indispensables restent accessibles en direct ci-dessous."
+    }
+  }
+}

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/png" href="/icon-192.png" />
+
+    <!-- Viewport verrouillé, overscroll-behavior: none, pas de zoom pinch, safe-area insets -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+
+    <meta name="theme-color" content="#1E4B4A" />
+    <meta name="description" content="Espace d'informations et d'actualités locales." />
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    <!-- Sécurité renforcée : Referrer-Policy, CSP neutre mais stricte -->
+    <meta name="referrer" content="no-referrer" />
+
+    <title>Espace Info</title>
+
+    <style>
+      /* Comportements d'application mobile native, anti-rechargement accidental */
+      html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100dvh;
+        overflow: hidden;
+        overscroll-behavior: none;
+        background-color: #FBF8F4;
+        -webkit-tap-highlight-color: transparent;
+        -webkit-touch-callout: none;
+        user-select: none;
+      }
+
+      /* Défilement inertiel natif */
+      .scroll-container {
+        -webkit-overflow-scrolling: touch;
+        overflow-y: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root" class="h-full w-full flex flex-col"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
