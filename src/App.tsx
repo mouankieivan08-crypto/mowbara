@@ -1,6 +1,7 @@
 import React from 'react';
 import { useAppState } from './AppStateContext';
 import { ErrorBoundary } from './components/ErrorBoundary';
+import { AppShell } from './components/AppShell';
 import { ScreenPIN } from './routes/ScreenPIN';
 import { ScreenHome } from './routes/ScreenHome';
 import { ScreenAnalysis } from './routes/ScreenAnalysis';
@@ -11,17 +12,23 @@ import { ScreenDirectory } from './routes/ScreenDirectory';
 import { ScreenSettings } from './routes/ScreenSettings';
 import { ScreenGuide } from './routes/ScreenGuide';
 import { ScreenAbout } from './routes/ScreenAbout';
+import { ScreenCarnet } from './routes/ScreenCarnet';
 
 export const AppContent: React.FC = () => {
   const { currentScreen } = useAppState();
 
-  // RÈGLE 21 : Chaque écran reste utilisable à 200 % de zoom navigateur sans troncature ni chevauchement.
-  // RÈGLE 1 & 23 : Transitions fluides, sorties de 0 ms rapides.
-  // Sur mobile, l'app prend tout l'écran (w-full min-h-[100dvh]).
-  // Sur desktop (md:), l'app s'affiche sous forme d'un magnifique châssis d'application mobile native centrée.
+  // Écran PIN verrouillé autonome (ultra discret, aucun header ni logo ni onglets)
+  if (currentScreen === 's1_pin') {
+    return (
+      <main className="flex-1 flex flex-col justify-between w-full min-h-screen relative overflow-hidden bg-fond-base max-w-[390px] mx-auto md:border md:border-bordure md:rounded-lg md:shadow-xl md:my-24 md:h-[840px] md:max-h-[90vh]">
+        <ScreenPIN />
+      </main>
+    );
+  }
+
+  // RÈGLE : Tous les autres écrans sont enveloppés dans l'AppShell responsive universelle
   return (
-    <main className="flex-1 flex flex-col justify-between w-full min-h-[100dvh] md:min-h-0 md:h-[840px] md:max-h-[90vh] md:max-w-[390px] md:rounded-lg md:shadow-xl md:border md:border-bordure relative overflow-hidden bg-fond-base">
-      {currentScreen === 's1_pin' && <ScreenPIN />}
+    <AppShell>
       {currentScreen === 's2_home' && <ScreenHome />}
       {currentScreen === 's3_analysis' && <ScreenAnalysis />}
       {currentScreen === 's4_results' && <ScreenResults />}
@@ -31,14 +38,15 @@ export const AppContent: React.FC = () => {
       {currentScreen === 's8_settings' && <ScreenSettings />}
       {currentScreen === 's9_guide' && <ScreenGuide />}
       {currentScreen === 's10_about' && <ScreenAbout />}
-    </main>
+      {currentScreen === 's12_carnet' && <ScreenCarnet />}
+    </AppShell>
   );
 };
 
 export const App: React.FC = () => {
   return (
     <ErrorBoundary>
-      <div className="min-h-[100dvh] w-full md:bg-fond-encart md:bg-gradient-to-br md:from-[#f5eee6] md:to-[#e8dfd4] md:flex md:items-center md:justify-center md:p-24 select-none">
+      <div className="min-h-screen w-full bg-fond-base select-none">
         <AppContent />
       </div>
     </ErrorBoundary>
