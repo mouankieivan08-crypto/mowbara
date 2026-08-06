@@ -17,6 +17,8 @@ interface AppStateContextProps {
   setIsOffline: (offline: boolean) => void;
   carnetActif: boolean;
   setCarnetActif: (actif: boolean) => void;
+  favorites: string[]; // List of favorite article IDs
+  setFavorites: (favs: string[]) => void;
 }
 
 const AppStateContext = createContext<AppStateContextProps | undefined>(undefined);
@@ -27,8 +29,9 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [textSize, setTextSizeState] = useState<string>(() => localStorage.getItem('taille_texte') || 'base');
 
   // RÈGLE ABSOLUE 4 : Aucune écriture dans localStorage hors des 3 clés autorisées (pin_hash, langue, taille_texte)
-  // carnetActif vit exclusivement en mémoire React durant la session.
+  // carnetActif et favoris vivent exclusivement en mémoire React durant la session.
   const [carnetActif, setCarnetActifState] = useState<boolean>(false);
+  const [favorites, setFavoritesState] = useState<string[]>([]);
 
   const [currentScreen, setCurrentScreenState] = useState<string>(() => {
     const storedPin = localStorage.getItem('pin_hash');
@@ -102,27 +105,30 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   const setCarnetActif = (actif: boolean) => {
-    // Aucune écriture dans localStorage
     setCarnetActifState(actif);
+  };
+
+  const setFavorites = (favs: string[]) => {
+    setFavoritesState(favs);
   };
 
   const setCurrentScreen = (screen: string) => {
     let routeSegment = '/a';
 
-    if (['s2_home', 's3_analysis', 's4_results', 's5_law', 's6_emergency'].includes(screen)) {
-      routeSegment = '/a'; // parler
+    // MAPPAGE EXPLICITE DES SEGMENTS NEUTRES DU CONGO :
+    // parler (Infos) -> /a, aide -> /b, carnet -> /c, SOS -> /d, sécurité -> /e
+    if (['s2_home', 's3_analysis', 's4_results', 's5_law', 's9_guide'].includes(screen)) {
+      routeSegment = '/a'; // Infos
     } else if (screen === 's1_pin') {
       routeSegment = '/a'; // verrou
     } else if (screen === 's7_directory') {
-      routeSegment = '/b'; // aide
-    } else if (screen === 's9_guide') {
-      routeSegment = '/c'; // droits
+      routeSegment = '/b'; // Aide
     } else if (screen === 's12_carnet') {
-      routeSegment = '/d'; // carnet
-    } else if (screen === 's8_settings') {
-      routeSegment = '/e'; // réglages
-    } else if (screen === 's10_about') {
-      routeSegment = '/e'; // à propos
+      routeSegment = '/c'; // Carnet
+    } else if (screen === 's6_emergency') {
+      routeSegment = '/d'; // SOS (Urgence)
+    } else if (['s8_settings', 's10_about'].includes(screen)) {
+      routeSegment = '/e'; // Sécurité (Réglages)
     }
 
     window.history.replaceState(null, '', routeSegment);
@@ -148,6 +154,8 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         setIsOffline,
         carnetActif,
         setCarnetActif,
+        favorites,
+        setFavorites,
       }}
     >
       <div className={`font-interface text-encre-forte min-h-screen bg-fond-base flex flex-col antialiased select-none overscroll-none text-${textSize}`}>
