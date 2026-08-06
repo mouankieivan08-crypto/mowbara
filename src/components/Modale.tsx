@@ -13,15 +13,20 @@ export const Modale: React.FC<ModaleProps> = ({ isOpen, onClose, title, children
   useEffect(() => {
     if (!isOpen) return;
 
+    // Push dummy state to allow popstate interception
+    window.history.pushState({ modalOpen: true }, '', window.location.pathname);
+
     const handlePopState = () => {
       onClose();
-      // Repousser l'état pour que l'app ne remonte pas le parcours
-      window.history.pushState(null, '', window.location.pathname);
     };
 
     window.addEventListener('popstate', handlePopState);
     return () => {
       window.removeEventListener('popstate', handlePopState);
+      // Clean up pushed state if the modal was closed via UI click rather than back button
+      if (window.history.state?.modalOpen) {
+        window.history.back();
+      }
     };
   }, [isOpen, onClose]);
 
