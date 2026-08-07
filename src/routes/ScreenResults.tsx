@@ -61,8 +61,8 @@ export const ScreenResults: React.FC = () => {
 
   return (
     <div className="flex-1 flex flex-col justify-between select-none bg-fond-base">
-      <div className="flex flex-col gap-24">
-        <div className="flex flex-col gap-8 pb-12 border-b border-bordure">
+      <div className="flex flex-col gap-16">
+        <div className="flex flex-col gap-6 pb-8 border-b border-bordure">
           <span className="text-xs font-bold uppercase tracking-wider text-encre-douce">
             {t('results.category_detected')}
           </span>
@@ -71,7 +71,7 @@ export const ScreenResults: React.FC = () => {
 
         {/* RÈGLE ABSOLUE : Classification incertaine (confiance < 0.5) : l'app dit qu'elle n'est pas sûre, ne cite aucun article, et oriente vers le 1444 */}
         {isUncertain ? (
-          <div className="bg-fond-carte border border-bordure rounded-lg p-16 flex flex-col gap-8">
+          <div className="bg-fond-carte border border-bordure rounded-lg p-12 flex flex-col gap-6">
             <p className="text-sm text-encre-forte font-semibold leading-relaxed">
               {t('results.confidence_low')}
             </p>
@@ -79,14 +79,14 @@ export const ScreenResults: React.FC = () => {
         ) : (
           categoryInfo && (
             <>
-              <div className="bg-fond-carte border border-bordure rounded-lg p-16 flex flex-col gap-8">
+              <div className="bg-fond-carte border border-bordure rounded-lg p-12 flex flex-col gap-6">
                 <p className="text-sm text-encre-forte leading-relaxed">
                   {categoryInfo.description}
                 </p>
               </div>
 
               {/* Loi congolaise détaillée */}
-              <div className="bg-fond-encart border-l-4 border-accent p-16 rounded-sm flex flex-col gap-8">
+              <div className="bg-fond-encart border-l-4 border-accent p-12 rounded-sm flex flex-col gap-6">
                 <span className="text-xs font-bold text-accent uppercase block">
                   {t('results.legal_text')}
                 </span>
@@ -95,7 +95,7 @@ export const ScreenResults: React.FC = () => {
                 </p>
                 <button
                   onClick={() => setCurrentScreen('s5_law')}
-                  className="text-xs font-bold text-primaire active:text-primaire-contact underline text-left mt-4 min-h-[48px] touch-manipulation"
+                  className="text-xs font-bold text-primaire active:text-primaire-contact underline text-left mt-2 min-h-[36px] touch-manipulation"
                 >
                   {t('results.view_details_btn')}
                 </button>
@@ -105,11 +105,11 @@ export const ScreenResults: React.FC = () => {
         )}
 
         {/* Contacts recommandés */}
-        <div className="flex flex-col gap-12">
-          <h3 className="font-titres text-base font-bold text-encre-forte">
+        <div className="flex flex-col gap-10">
+          <h3 className="font-titres text-sm font-bold text-encre-forte">
             {t('results.recommended_contacts')}
           </h3>
-          <div className="flex flex-col gap-16">
+          <div className="flex flex-col gap-10">
             {recommendedContacts.map((contact) => (
               <CarteContact
                 key={contact.id}
@@ -124,7 +124,7 @@ export const ScreenResults: React.FC = () => {
         </div>
       </div>
 
-      <div className="flex flex-col gap-12 mt-32 mb-24">
+      <div className="flex flex-col gap-10 mt-16 mb-12">
         <Bouton variant="primaire" onClick={handleNewAnalysis}>
           {t('results.back_home')}
         </Bouton>

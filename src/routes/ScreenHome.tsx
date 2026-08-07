@@ -113,26 +113,26 @@ export const ScreenHome: React.FC = () => {
 
       {/* INF-1 : Accueil Infos */}
       {infosView === 'accueil' && (
-        <div className="flex flex-col gap-24">
+        <div className="flex flex-col gap-16">
 
           {/* 1. Carte d'appel / Questionnaire d'auto-évaluation */}
-          <div className="bg-primaire text-texte-sur-fonce rounded-lg p-20 shadow-md flex flex-col gap-16">
+          <div className="bg-primaire text-texte-sur-fonce rounded-lg p-16 shadow-md flex flex-col gap-12">
             <div className="flex justify-between items-start">
-              <span className="bg-white/20 text-white text-[11px] font-bold uppercase tracking-wider px-8 py-4 rounded-full">
+              <span className="bg-white/20 text-white text-[10px] font-bold uppercase tracking-wider px-8 py-4 rounded-full">
                 6 questionnaires d'évaluation
               </span>
             </div>
             <div>
-              <h3 className="font-titres text-xl font-bold text-white leading-snug">
+              <h3 className="font-titres text-lg font-bold text-white leading-snug">
                 Quelle est ma situation ?
               </h3>
-              <p className="text-sm text-white/80 mt-8 leading-relaxed">
+              <p className="text-sm text-white/80 mt-4 leading-relaxed">
                 Répondez de façon anonyme à nos évaluations rapides pour identifier vos droits et peines prévues par la loi congolaise.
               </p>
             </div>
             <button
               onClick={() => setInfosView('grid')}
-              className="text-white text-sm font-bold underline text-left focus:outline-none mt-8"
+              className="text-white text-xs font-bold underline text-left focus:outline-none mt-4"
             >
               Accéder aux questionnaires →
             </button>
@@ -164,7 +164,7 @@ export const ScreenHome: React.FC = () => {
 
           {/* 3. Contenu selon le segment */}
           {selectedSegment === 'guides' ? (
-            <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-6">
               {rubriques.map((rubrique) => (
                 <div
                   key={rubrique.id}
@@ -172,24 +172,24 @@ export const ScreenHome: React.FC = () => {
                     // Simuler la navigation vers l'article INF-5/INF-6
                     setCurrentScreen('s9_guide');
                   }}
-                  className="bg-fond-carte border border-bordure h-[64px] rounded-lg px-16 flex items-center justify-between active:bg-fond-encart transition-colors cursor-pointer shadow-xs"
+                  className="bg-fond-carte border border-bordure h-[52px] rounded-lg px-12 flex items-center justify-between active:bg-fond-encart transition-colors cursor-pointer shadow-xs"
                 >
-                  <div className="flex items-center gap-12 truncate">
-                    <svg className="w-20 h-20 text-primaire shrink-0 fill-current" viewBox="0 0 24 24">
+                  <div className="flex items-center gap-10 truncate">
+                    <svg className="w-18 h-18 text-primaire shrink-0 fill-current" viewBox="0 0 24 24">
                       <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-4h-2V7h2v2z" />
                     </svg>
-                    <span className="text-sm font-semibold text-encre-forte truncate">
+                    <span className="text-xs font-semibold text-encre-forte truncate">
                       {rubrique.titre}
                     </span>
                   </div>
-                  <span className="text-encre-douce text-lg font-bold shrink-0">›</span>
+                  <span className="text-encre-douce text-base font-bold shrink-0">›</span>
                 </div>
               ))}
             </div>
           ) : (
-            <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-6">
               {favorites.length === 0 ? (
-                <p className="text-sm text-encre-douce text-center py-32 italic">
+                <p className="text-xs text-encre-douce text-center py-20 italic">
                   Aucun guide enregistré en favori pour le moment.
                 </p>
               ) : (
@@ -198,19 +198,19 @@ export const ScreenHome: React.FC = () => {
                   .map(rubrique => (
                     <div
                       key={rubrique.id}
-                      className="bg-fond-carte border border-bordure h-[64px] rounded-lg px-16 flex items-center justify-between shadow-xs"
+                      className="bg-fond-carte border border-bordure h-[52px] rounded-lg px-12 flex items-center justify-between shadow-xs"
                     >
-                      <div className="flex items-center gap-12 truncate">
-                        <svg className="w-20 h-20 text-primaire shrink-0 fill-current" viewBox="0 0 24 24">
+                      <div className="flex items-center gap-10 truncate">
+                        <svg className="w-18 h-18 text-primaire shrink-0 fill-current" viewBox="0 0 24 24">
                           <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-4h-2V7h2v2z" />
                         </svg>
-                        <span className="text-sm font-semibold text-encre-forte truncate">
+                        <span className="text-xs font-semibold text-encre-forte truncate">
                           {rubrique.titre}
                         </span>
                       </div>
                       <button
                         onClick={() => toggleFavorite(rubrique.id)}
-                        className="text-xs font-bold text-danger px-8 py-4 active:scale-95"
+                        className="text-[10px] font-bold text-danger px-8 py-4 active:scale-95"
                       >
                         Retirer
                       </button>
@@ -224,9 +224,9 @@ export const ScreenHome: React.FC = () => {
 
       {/* INF-2 : Questionnaires Grid */}
       {infosView === 'grid' && (
-        <div className="flex flex-col gap-24">
-          <div className="flex justify-between items-center border-b border-bordure pb-12">
-            <h3 className="font-titres text-lg font-bold text-encre-forte">
+        <div className="flex flex-col gap-16">
+          <div className="flex justify-between items-center border-b border-bordure pb-8">
+            <h3 className="font-titres text-base font-bold text-encre-forte">
               Auto-évaluations
             </h3>
             <button
@@ -237,23 +237,23 @@ export const ScreenHome: React.FC = () => {
             </button>
           </div>
 
-          <div className="grid grid-cols-1 min-[400px]:grid-cols-2 gap-12">
+          <div className="grid grid-cols-1 min-[400px]:grid-cols-2 gap-10">
             {/* Ma situation personnelle (Texte libre) */}
             <div
               onClick={() => setInfosView('text-libre')}
-              className="col-span-1 min-[400px]:col-span-2 bg-fond-encart border border-primaire/20 rounded-lg p-16 shadow-xs active:bg-fond-encart/80 cursor-pointer flex flex-col justify-between h-[120px]"
+              className="col-span-1 min-[400px]:col-span-2 bg-fond-encart border border-primaire/20 rounded-lg p-12 shadow-xs active:bg-fond-encart/80 cursor-pointer flex flex-col justify-between h-[100px]"
             >
               <div className="flex justify-between items-start">
-                <span className="text-[10px] font-bold text-primaire uppercase">Texte Libre</span>
-                <span className="text-[10px] font-bold text-accent">RAPIDE</span>
+                <span className="text-[9px] font-bold text-primaire uppercase">Texte Libre</span>
+                <span className="text-[9px] font-bold text-accent">RAPIDE</span>
               </div>
               <div>
-                <h4 className="font-titres text-sm font-bold text-encre-forte">
+                <h4 className="font-titres text-xs font-bold text-encre-forte">
                   Ma situation personnelle
                 </h4>
-                <p className="text-[11px] text-encre-douce mt-4">Décrivez votre situation en texte libre.</p>
+                <p className="text-[10px] text-encre-douce mt-1">Décrivez votre situation en texte libre.</p>
               </div>
-              <span className="text-xs font-bold text-primaire text-right">Démarrer →</span>
+              <span className="text-[11px] font-bold text-primaire text-right">Démarrer →</span>
             </div>
 
             {/* Autres questionnaires */}
@@ -267,18 +267,18 @@ export const ScreenHome: React.FC = () => {
               <div
                 key={i}
                 onClick={() => handleStartQuestionnaire(qName)}
-                className="bg-fond-carte border border-bordure rounded-lg p-16 shadow-xs active:bg-fond-encart transition-colors cursor-pointer flex flex-col justify-between h-[120px]"
+                className="bg-fond-carte border border-bordure rounded-lg p-12 shadow-xs active:bg-fond-encart transition-colors cursor-pointer flex flex-col justify-between h-[100px]"
               >
                 <div className="flex justify-between items-start">
-                  <span className="text-[10px] font-bold text-encre-douce">4 questions</span>
-                  <span className="text-[10px] font-bold text-attention">DISPONIBLE</span>
+                  <span className="text-[9px] font-bold text-encre-douce">4 questions</span>
+                  <span className="text-[9px] font-bold text-attention">DISPONIBLE</span>
                 </div>
                 <div>
-                  <h4 className="font-titres text-sm font-bold text-encre-forte truncate">
+                  <h4 className="font-titres text-xs font-bold text-encre-forte truncate">
                     {qName}
                   </h4>
                 </div>
-                <span className="text-xs font-bold text-primaire text-right">Démarrer →</span>
+                <span className="text-[11px] font-bold text-primaire text-right">Démarrer →</span>
               </div>
             ))}
           </div>
@@ -287,8 +287,8 @@ export const ScreenHome: React.FC = () => {
 
       {/* INF-3 : Questionnaire Run */}
       {infosView === 'run' && (
-        <div className="flex flex-col gap-24">
-          <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-16">
+          <div className="flex flex-col gap-6">
             {/* Barre de progression */}
             <div className="w-full bg-fond-encart h-4 rounded-full overflow-hidden">
               <div
@@ -296,21 +296,21 @@ export const ScreenHome: React.FC = () => {
                 style={{ width: `${((currentQuestionIndex + 1) / QUESTIONS_MOCK.length) * 100}%` }}
               />
             </div>
-            <span className="text-[11px] font-bold text-encre-douce">
+            <span className="text-[10px] font-bold text-encre-douce">
               Question {currentQuestionIndex + 1} sur {QUESTIONS_MOCK.length} ({selectedQuestionnaire})
             </span>
           </div>
 
-          <h3 className="font-titres text-lg font-bold text-encre-forte leading-snug">
+          <h3 className="font-titres text-base font-bold text-encre-forte leading-snug">
             {QUESTIONS_MOCK[currentQuestionIndex].texte}
           </h3>
 
-          <div className="flex flex-col gap-12 mt-12">
+          <div className="flex flex-col gap-8 mt-4">
             {QUESTIONS_MOCK[currentQuestionIndex].reponses.map((rep, idx) => (
               <button
                 key={idx}
                 onClick={() => setSelectedAnswer(rep)}
-                className={`w-full min-h-[56px] px-16 py-12 rounded-lg text-sm font-bold text-left border transition-all ${
+                className={`w-full min-h-[46px] px-12 py-8 rounded-lg text-xs font-bold text-left border transition-all ${
                   selectedAnswer === rep
                     ? 'bg-primaire text-white border-transparent'
                     : 'bg-fond-carte border-bordure text-encre-forte active:bg-fond-encart'
@@ -321,10 +321,10 @@ export const ScreenHome: React.FC = () => {
             ))}
           </div>
 
-          <div className="flex justify-between items-center mt-24">
+          <div className="flex justify-between items-center mt-16">
             <button
               onClick={handlePrevQuestion}
-              className={`text-sm font-bold px-16 py-12 rounded-md ${
+              className={`text-xs font-bold px-12 py-8 rounded-md ${
                 currentQuestionIndex === 0
                   ? 'text-encre-douce/40 cursor-not-allowed'
                   : 'text-encre-forte active:bg-fond-encart'
@@ -337,7 +337,7 @@ export const ScreenHome: React.FC = () => {
             <button
               onClick={handleNextQuestion}
               disabled={!selectedAnswer}
-              className={`text-sm font-bold px-24 py-12 rounded-md transition-all ${
+              className={`text-xs font-bold px-16 py-8 rounded-md transition-all ${
                 selectedAnswer
                   ? 'bg-primaire text-white active:scale-95'
                   : 'bg-encre-douce/10 text-encre-douce/50 cursor-not-allowed'
@@ -349,7 +349,7 @@ export const ScreenHome: React.FC = () => {
 
           <button
             onClick={() => setInfosView('results')}
-            className="text-xs font-semibold text-encre-douce text-center mt-12 hover:underline focus:outline-none"
+            className="text-[11px] font-semibold text-encre-douce text-center mt-8 hover:underline focus:outline-none"
           >
             Je préfère ne pas répondre et voir les résultats
           </button>
@@ -358,42 +358,42 @@ export const ScreenHome: React.FC = () => {
 
       {/* INF-4 : Questionnaire Results */}
       {infosView === 'results' && (
-        <div className="flex flex-col gap-24">
-          <div className="bg-fond-carte border border-bordure rounded-lg p-20 shadow-md flex flex-col gap-16">
-            <h3 className="font-titres text-lg font-bold text-encre-forte border-b border-bordure pb-12">
+        <div className="flex flex-col gap-16">
+          <div className="bg-fond-carte border border-bordure rounded-lg p-16 shadow-md flex flex-col gap-12">
+            <h3 className="font-titres text-base font-bold text-encre-forte border-b border-bordure pb-8">
               Synthèse d'orientation
             </h3>
-            <p className="text-sm text-encre-douce leading-relaxed">
+            <p className="text-xs text-encre-douce leading-relaxed">
               D'après vos réponses, plusieurs lois congolaises protègent vos droits :
             </p>
-            <div className="flex flex-wrap gap-8">
-              <span className="bg-accent/15 text-accent text-xs font-bold px-12 py-6 rounded-full">
+            <div className="flex flex-wrap gap-6">
+              <span className="bg-accent/15 text-accent text-[11px] font-bold px-10 py-4 rounded-full">
                 Loi Mouébara n°19-2022
               </span>
-              <span className="bg-accent/15 text-accent text-xs font-bold px-12 py-6 rounded-full">
+              <span className="bg-accent/15 text-accent text-[11px] font-bold px-10 py-4 rounded-full">
                 Code de la Famille
               </span>
             </div>
           </div>
 
-          <div className="flex flex-col gap-12">
-            <h4 className="font-titres text-sm font-bold text-encre-forte">
+          <div className="flex flex-col gap-10">
+            <h4 className="font-titres text-xs font-bold text-encre-forte">
               Recommandation immédiate
             </h4>
-            <div className="bg-fond-carte border border-bordure p-16 rounded-lg flex flex-col gap-12">
-              <span className="text-xs font-bold uppercase tracking-wider text-accent">LIGNE DIRECTE</span>
-              <h5 className="font-titres text-base font-bold text-encre-forte">Numéro d'Écoute National 1444</h5>
-              <p className="text-xs text-encre-douce">Anonyme, gratuit et disponible 24h/24 en République du Congo.</p>
+            <div className="bg-fond-carte border border-bordure p-12 rounded-lg flex flex-col gap-10">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-accent">LIGNE DIRECTE</span>
+              <h5 className="font-titres text-sm font-bold text-encre-forte">Numéro d'Écoute National 1444</h5>
+              <p className="text-[11px] text-encre-douce">Anonyme, gratuit et disponible 24h/24 en République du Congo.</p>
               <a
                 href="tel:1444"
-                className="w-full min-h-[48px] bg-primaire text-white rounded-md flex items-center justify-center font-bold text-sm"
+                className="w-full min-h-[44px] bg-primaire text-white rounded-md flex items-center justify-center font-bold text-xs"
               >
                 Appeler le 1444
               </a>
             </div>
           </div>
 
-          <Bouton variant="primaire" onClick={() => setInfosView('accueil')} className="mt-16">
+          <Bouton variant="primaire" onClick={() => setInfosView('accueil')} className="mt-12">
             Retour à l'accueil Infos
           </Bouton>
         </div>
