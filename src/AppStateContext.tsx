@@ -158,7 +158,7 @@ export const AppStateProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         setFavorites,
       }}
     >
-      <div className={`font-interface text-encre-forte min-h-screen bg-fond-base flex flex-col antialiased select-none overscroll-none text-${textSize}`}>
+      <div className={`font-interface text-encre-forte h-[100dvh] bg-fond-base flex flex-col antialiased select-none overscroll-none text-${textSize} overflow-hidden`}>
         {children}
       </div>
     </AppStateContext.Provider>

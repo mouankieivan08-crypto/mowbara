@@ -303,7 +303,7 @@ export const AppShell: React.FC<AppShellProps> = ({ children }) => {
           {/* Conteneur principal de défilement de contenu */}
           <div
             ref={contentRef}
-            className="flex-1 overflow-y-auto w-full max-[599px]:p-12 min-[600px]:p-20 max-[599px]:pb-[64px] min-[600px]:max-[899px]:pb-[72px] max-[899px]:pt-8 min-[600px]:max-[899px]:max-w-[560px] min-[600px]:max-[899px]:mx-auto min-[900px]:max-w-[680px] min-[900px]:mx-auto min-[900px]:py-48"
+            className="flex-1 overflow-y-auto w-full max-w-full overflow-x-hidden max-[599px]:p-12 min-[600px]:p-20 max-[599px]:pb-[64px] min-[600px]:max-[899px]:pb-[72px] max-[899px]:pt-8 min-[600px]:max-[899px]:max-w-[560px] min-[600px]:max-[899px]:mx-auto min-[900px]:max-w-[680px] min-[900px]:mx-auto min-[900px]:py-48"
           >
             <AnimatePresence mode="wait">
               <motion.div

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { motion } from 'framer-motion';
 import { useAppState } from '../AppStateContext';
 import { exitQuickly } from '../exit';
 import { logger } from '../logger';
@@ -89,17 +88,17 @@ export const ScreenAnalysis: React.FC = () => {
 
   if (errorState) {
     return (
-      <div className="flex-1 flex flex-col justify-between select-none bg-fond-base">
+      <div className="flex-1 flex flex-col justify-between select-none bg-fond-base animate-micro-shake">
         <div className="flex flex-col gap-24 text-center">
-          <h2 className="font-titres text-xl font-bold text-danger">
-            {t('error.title')}
+          <h2 className="font-titres text-xl font-bold text-terracotta">
+            Un souci est survenu
           </h2>
           <p className="text-sm text-encre-douce leading-relaxed px-12">
-            {t('error.body')}
+            La réponse n'a pas pu être chargée. Veuillez réessayer ou contacter directement nos numéros d'écoute d'urgence ci-dessous.
           </p>
 
           {/* RÈGLE CENTRALE : toute erreur affiche le 117 et le 1444 en dur. */}
-          <div className="bg-fond-carte border border-bordure rounded-lg p-16 flex flex-col gap-12 mt-16 max-w-[320px] mx-auto w-full">
+          <div className="bg-terracotta-soft border rounded-lg p-16 flex flex-col gap-12 mt-16 max-w-[320px] mx-auto w-full">
             <span className="text-xs font-bold text-accent uppercase tracking-wider block text-center">
               Numéros de secours indispensables
             </span>
@@ -159,19 +158,15 @@ export const ScreenAnalysis: React.FC = () => {
             </div>
           </div>
         ) : (
-          /* RÈGLE : Skeletons : pulsation d'opacity 1.4 s — jamais de shimmer en dégradé animé. Carte de résultat = 4 lignes de largeurs inégales. */
-          <motion.div
-            animate={{ opacity: [0.4, 1, 0.4] }}
-            transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
-            className="flex flex-col gap-12"
-          >
+          /* Skeletons avec effet shimmer en dégradé rose pâle ⇄ ivoire */
+          <div className="flex flex-col gap-12">
             <div className="bg-fond-carte border border-bordure rounded-lg p-16 flex flex-col gap-12">
-              <div className="h-16 bg-fond-encart rounded-sm w-3/4" />
-              <div className="h-12 bg-fond-encart rounded-sm w-full" />
-              <div className="h-12 bg-fond-encart rounded-sm w-5/6" />
-              <div className="h-12 bg-fond-encart rounded-sm w-1/2" />
+              <div className="h-16 shimmer-skeleton rounded-sm w-3/4" />
+              <div className="h-12 shimmer-skeleton rounded-sm w-full" />
+              <div className="h-12 shimmer-skeleton rounded-sm w-5/6" />
+              <div className="h-12 shimmer-skeleton rounded-sm w-1/2" />
             </div>
-          </motion.div>
+          </div>
         )}
       </div>
 

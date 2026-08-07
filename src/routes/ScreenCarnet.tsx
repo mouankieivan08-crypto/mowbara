@@ -20,6 +20,7 @@ export const ScreenCarnet: React.FC = () => {
 
   const [isAdding, setIsAdding] = useState(false);
   const [showExportModal, setShowExportModal] = useState(false);
+  const [showSuccessCheck, setShowSuccessCheck] = useState(false);
 
   const handleActivateCarnet = () => {
     setCarnetActif(true);
@@ -36,7 +37,13 @@ export const ScreenCarnet: React.FC = () => {
 
     setNotes([newNote, ...notes]);
     setNoteText('');
-    setIsAdding(false);
+
+    // Afficher l'animation de succès vert sauge
+    setShowSuccessCheck(true);
+    setTimeout(() => {
+      setShowSuccessCheck(false);
+      setIsAdding(false);
+    }, 1500);
   };
 
   const handleDeleteNote = (id: string) => {
@@ -81,6 +88,24 @@ export const ScreenCarnet: React.FC = () => {
     URL.revokeObjectURL(url);
     setShowExportModal(false);
   };
+
+  // Animation de succès sage green confirmation
+  if (showSuccessCheck) {
+    return (
+      <div className="flex-1 flex flex-col justify-center items-center bg-sauge-light min-h-full py-48 text-center select-none">
+        <svg className="w-64 h-64 text-sauge fill-none stroke-current" viewBox="0 0 52 52" strokeWidth={4}>
+          <circle className="opacity-20" cx="26" cy="26" r="25" />
+          <path className="animate-stroke" strokeLinecap="round" strokeLinejoin="round" d="M14 27l8 8 16-16" />
+        </svg>
+        <h3 className="font-titres text-lg font-bold text-sauge mt-16 animate-pulse">
+          Note enregistrée !
+        </h3>
+        <p className="text-xs text-encre-douce mt-4 max-w-[240px]">
+          Vos preuves sont sécurisées temporairement en mémoire locale.
+        </p>
+      </div>
+    );
+  }
 
   // 1. CAR-0 : Carnet désactivé (état par défaut)
   if (!carnetActif) {
