@@ -172,6 +172,7 @@
     window.__duration = cfg.duration;
     window.__cues = cfg.cues || [];
     window.__music = cfg.music || {};
+    window.__voice = cfg.voice || null;
     window.__render = (t) => cfg.render(t);
 
     const imgs = Array.from(document.images).map((im) =>

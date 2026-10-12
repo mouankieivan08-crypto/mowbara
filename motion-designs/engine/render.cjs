@@ -6,8 +6,12 @@
  *   node engine/render.cjs happy-fruits --fps 30
  *   node engine/render.cjs dore-et-vous --stills 1.2,4,19.5   (captures PNG pour vérifier)
  *   node engine/render.cjs dore-et-vous --no-audio
+ *   node engine/render.cjs dore-et-vous --audio-only           (refait seulement le son, sans recalculer l'image)
  *
- * Prérequis : Node 18+, Playwright (Chromium), ffmpeg, Python 3 + numpy (bande-son).
+ * Si la composition définit une voix off, une seconde version <nom>-voixoff.mp4 est produite.
+ *
+ * Prérequis : Node 18+, Playwright (Chromium), ffmpeg, Python 3 + numpy (bande-son),
+ * + kokoro-onnx, scipy, soundfile et les fichiers du modèle Kokoro pour la voix off (voir README).
  */
 const path = require('path');
 const fs = require('fs');
@@ -35,9 +39,19 @@ const opt = (k, d) => {
 const FPS = parseInt(opt('--fps', '30'), 10);
 const stills = opt('--stills', null);
 const noAudio = args.includes('--no-audio');
+const audioOnly = args.includes('--audio-only');
 const PY = process.env.PYTHON || 'python3';
 const OUT = path.join(ROOT, 'output');
 fs.mkdirSync(OUT, { recursive: true });
+
+/** Remplace la piste audio d'une vidéo existante (l'image est copiée telle quelle). */
+function remux(srcMp4, wav, outMp4) {
+  const tmp = outMp4 + '.tmp.mp4';
+  const r = spawnSync('ffmpeg', ['-v', 'error', '-y', '-i', srcMp4, '-i', wav, '-map', '0:v', '-map', '1:a', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-shortest', '-movflags', '+faststart', tmp], { stdio: 'inherit' });
+  if (r.status !== 0) throw new Error('ffmpeg remux a échoué');
+  fs.renameSync(tmp, outMp4);
+  console.log('→', outMp4);
+}
 
 const MIME = { '.html': 'text/html', '.js': 'text/javascript', '.cjs': 'text/javascript', '.css': 'text/css', '.png': 'image/png', '.webp': 'image/webp', '.jpg': 'image/jpeg', '.ttf': 'font/ttf', '.wav': 'audio/wav', '.svg': 'image/svg+xml' };
 const server = http.createServer((req, res) => {
@@ -75,8 +89,9 @@ const server = http.createServer((req, res) => {
 
   // 1) Bande-son synchronisée sur les repères de la composition
   let wav = null;
+  let voWav = null;
   if (!noAudio) {
-    const spec = await page.evaluate(() => ({ cues: window.__cues, music: window.__music, duration: window.__duration }));
+    const spec = await page.evaluate(() => ({ cues: window.__cues, music: window.__music, voice: window.__voice, duration: window.__duration }));
     const specFile = path.join(OUT, `${name}.audio.json`);
     fs.writeFileSync(specFile, JSON.stringify(spec, null, 2));
     wav = path.join(OUT, `${name}.wav`);
@@ -85,11 +100,29 @@ const server = http.createServer((req, res) => {
       console.warn('⚠ Bande-son non générée (Python/numpy manquant ?) — export sans audio.');
       wav = null;
     }
+    if (wav && spec.voice) {
+      voWav = path.join(OUT, `${name}-voixoff.wav`);
+      const extra = args.includes('--check') ? ['--check'] : [];
+      const v = spawnSync(PY, [path.join(__dirname, 'voice.py'), specFile, wav, voWav, ...extra], { stdio: 'inherit' });
+      if (v.status !== 0) {
+        console.warn('⚠ Voix off non générée (kokoro-onnx ou modèle manquant ?) — seule la version musique est exportée.');
+        voWav = null;
+      }
+    }
+  }
+
+  const mp4 = path.join(OUT, `${name}.mp4`);
+  if (audioOnly) {
+    if (!fs.existsSync(mp4)) throw new Error(`${mp4} introuvable : lancez d'abord un export complet.`);
+    if (wav) remux(mp4, wav, mp4);
+    if (voWav) remux(mp4, voWav, path.join(OUT, `${name}-voixoff.mp4`));
+    await browser.close();
+    server.close();
+    return;
   }
 
   // 2) Images → ffmpeg
   const frames = Math.round(duration * FPS);
-  const mp4 = path.join(OUT, `${name}.mp4`);
   const ff = ['-y', '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', 'mjpeg', '-i', '-'];
   if (wav) ff.push('-i', wav);
   ff.push('-c:v', 'libx264', '-preset', 'slow', '-crf', '17', '-pix_fmt', 'yuv420p', '-profile:v', 'high', '-r', String(FPS), '-movflags', '+faststart');
@@ -118,6 +151,7 @@ const server = http.createServer((req, res) => {
   await browser.close();
   server.close();
   console.log('→', mp4);
+  if (voWav) remux(mp4, voWav, path.join(OUT, `${name}-voixoff.mp4`));
 })().catch((e) => {
   console.error(e);
   process.exit(1);

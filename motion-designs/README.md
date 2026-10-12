@@ -1,12 +1,13 @@
 # Motion designs — Doré et Vous, Happy Fruits & NICA nail's
 
-Deux vidéos publicitaires verticales, prêtes à publier sur **TikTok, Instagram Reels, Statut WhatsApp et Facebook**.
+Trois vidéos publicitaires verticales (1080×1920, 30 i/s, H.264 + AAC), prêtes à publier sur **TikTok, Instagram Reels, Statut WhatsApp et Facebook**.
+Chaque vidéo existe en deux versions : **avec voix off** (recommandée) et **musique seule** (pour poser un son tendance TikTok).
 
-| Vidéo | Fichier | Format | Durée | Cible |
+| Vidéo | Avec voix off | Musique seule | Durée | Cible |
 |---|---|---|---|---|
-| **Doré et Vous** | [`output/dore-et-vous.mp4`](output/dore-et-vous.mp4) | 1080×1920, 30 i/s, H.264 + AAC | 29,5 s | Particuliers (B2C), Brazzaville |
-| **Happy Fruits** | [`output/happy-fruits.mp4`](output/happy-fruits.mp4) | 1080×1920, 30 i/s, H.264 + AAC | 29,5 s | Entreprises (B2B), Congo-Brazzaville |
-| **NICA nail's** | [`output/nica-nails.mp4`](output/nica-nails.mp4) | 1080×1920, 30 i/s, H.264 + AAC | 30 s | Clientes du salon (B2C), réservation WhatsApp |
+| **Doré et Vous** | [`dore-et-vous-voixoff.mp4`](output/dore-et-vous-voixoff.mp4) | [`dore-et-vous.mp4`](output/dore-et-vous.mp4) | 29,5 s | Particuliers (B2C), Brazzaville |
+| **Happy Fruits** | [`happy-fruits-voixoff.mp4`](output/happy-fruits-voixoff.mp4) | [`happy-fruits.mp4`](output/happy-fruits.mp4) | 29,5 s | Entreprises (B2B), Congo-Brazzaville |
+| **NICA nail's** | [`nica-nails-voixoff.mp4`](output/nica-nails-voixoff.mp4) | [`nica-nails.mp4`](output/nica-nails.mp4) | 30 s | Clientes du salon (B2C), réservation WhatsApp |
 
 Les vignettes de couverture sont dans `output/*-cover.jpg`.
 
@@ -69,7 +70,54 @@ Style noir & or luxueux (comme l'affiche des tarifs), rose en accent, musique R&
 
 ---
 
-## 4. Conseils de publication
+## 4. Voix off
+
+Voix féminine française synthétisée avec **Kokoro** (modèle libre, licence Apache 2.0, utilisable en publicité),
+calée phrase par phrase sur les scènes. La musique baisse automatiquement d'environ 11 dB sous la voix.
+Chaque phrase a été vérifiée par transcription automatique (Whisper) : prix et numéros de téléphone sont compris sans erreur.
+
+Les textes ci-dessous peuvent aussi servir de **script si vous préférez enregistrer une vraie voix** (votre voix, un animateur local…) :
+calez chaque phrase sur le temps indiqué.
+
+**Doré et Vous**
+| Temps | Texte |
+|---|---|
+| 0,1 s | Des crêpes… en tagliatelles ?! |
+| 2,6 s | Doré… et Vous ! Des bouchées de bonheur, dans chaque pot ! |
+| 6 s | Crêpe, crème onctueuse, garnitures gourmandes. |
+| 8,5 s | Dix saveurs irrésistibles : Oreo, Kinder, mangue, coco, caramel, chocolat… Laquelle sera votre préférée ? Dites-le en commentaire ! |
+| 18,1 s | Un seul prix : deux mille francs le pot ! |
+| 21,5 s | Et les garnitures, dès trois cents francs ! |
+| 24,6 s | Commandez maintenant au 06 482 63 87 ! |
+
+**Happy Fruits**
+| Temps | Texte |
+|---|---|
+| 0,1 s | Dix heures… et vos équipes sont déjà à plat ? |
+| 3,2 s | Happy Fruits : la pause fruitée qui recharge vos équipes ! |
+| 7 s | Six combos de fruits frais, prêts à déguster. |
+| 9,5 s | Mangue, ananas, passion, papaye, pastèque… Des fruits de saison du Congo, cent pour cent naturels, sans conservateurs ! |
+| 18,2 s | Bureaux, écoles, chantiers : livraison régulière et commandes en gros. |
+| 23,5 s | Le fruit, c'est la vie ! |
+| 25,5 s | Offrez-leur la pause qui donne la pêche. Demandez votre devis ! |
+
+**NICA nail's**
+| Temps | Texte |
+|---|---|
+| 0,25 s | Envie d'ongles… de reine ? |
+| 3,25 s | Bienvenue chez NICA nail's ! |
+| 6,3 s | French, nail art, fleurs en 3D, touches dorées… Découvrez nos réalisations. |
+| 12,2 s | Vernis permanent, pose gel, pose américaine, gainage des ongles et des pieds… Toutes nos prestations, à petits prix. |
+| 20,6 s | À partir de trois mille francs seulement ! |
+| 22,95 s | Pour réserver : votre nom, la prestation et la date. |
+| 25,6 s | Sur WhatsApp, au 06 482 63 87 ! |
+
+Les textes se modifient dans le bloc `voice` de chaque `index.html`. La syntaxe `[mot](phonèmes)` impose une prononciation
+(utilisée pour « NICA nail's », « WhatsApp », « Happy Fruits », « Oreo », « Kinder »…).
+
+---
+
+## 5. Conseils de publication
 
 **Textes prêts à copier-coller**
 
@@ -102,18 +150,24 @@ Style noir & or luxueux (comme l'affiche des tarifs), rose en accent, musique R&
 
 ---
 
-## 5. Modifier et ré-exporter
+## 6. Modifier et ré-exporter
 
 Les vidéos sont codées en HTML/JS : chaque texte, couleur ou timing se modifie directement dans
 `dore-et-vous/index.html`, `happy-fruits/index.html` et `nica-nails/index.html` (prix, numéro, saveurs, combos, prestations, phrases…).
 
 **Prérequis :** Node 18+, Playwright (`npm i -g playwright` puis `npx playwright install chromium`), ffmpeg, Python 3 + numpy.
 
+**Pour la voix off :** `pip install kokoro-onnx soundfile scipy`, puis placer `kokoro-v1.0.onnx` et `voices-v1.0.bin`
+(release « model-files-v1.0 » du dépôt GitHub `thewh1teagle/kokoro-onnx`) dans `engine/models/`
+(ou indiquer leur dossier avec la variable `KOKORO_DIR`). Sans ces fichiers, seule la version musique est exportée.
+
 ```bash
 cd motion-designs
 node engine/render.cjs dore-et-vous        # → output/dore-et-vous.mp4 (+ musique + vignette)
 node engine/render.cjs happy-fruits        # → output/happy-fruits.mp4
-node engine/render.cjs nica-nails          # → output/nica-nails.mp4
+node engine/render.cjs nica-nails          # → output/nica-nails.mp4 + output/nica-nails-voixoff.mp4
+node engine/render.cjs nica-nails --audio-only           # refait seulement le son / la voix off (quelques secondes)
+node engine/render.cjs nica-nails --audio-only --check   # + transcription automatique de chaque phrase (Whisper, sherpa-onnx)
 node engine/render.cjs happy-fruits --stills 5,12,28   # captures PNG pour vérifier une modification
 node engine/check.cjs happy-fruits         # détecte les textes qui sortent du cadre
 ```
@@ -137,10 +191,12 @@ motion-designs/
 │   ├── stage.css              # scène 1080×1920 + polices
 │   ├── render.cjs             # export image par image → ffmpeg → MP4
 │   ├── music.py               # musique + bruitages synthétisés, calés sur les repères
+│   ├── voice.py               # voix off (Kokoro), calage par scène, baisse de la musique sous la voix
+│   ├── asr_check.py           # vérification de la voix off par transcription automatique
 │   └── check.cjs              # contrôle des débordements de texte
 ├── assets/
 │   ├── src/                   # visuels d'origine (logo, affiches)
 │   ├── cut/                   # produits détourés (pots, coupes, garnitures, logo), vignettes des prestations NICA
 │   └── fonts/                 # Anton, Permanent Marker, Kaushan Script, Fredoka, Poppins, Pacifico, Cinzel, Great Vibes (licence OFL/Apache)
-└── output/                    # vidéos MP4 + vignettes
+└── output/                    # vidéos MP4 (voix off + musique seule) + vignettes
 ```

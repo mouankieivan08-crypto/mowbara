@@ -1,3 +1,4 @@
 output/*.wav
 output/*.audio.json
 output/*-still-*.png
+output/voice/
