@@ -24,7 +24,7 @@ const server = http.createServer((req, res) => {
       const out = [];
       for (const e of document.querySelectorAll('#cam > .m')) {
         if (e.style.visibility !== 'visible' || parseFloat(e.style.opacity) < 0.9) continue;
-        if (e.matches('.dust,.spark,.drip,.dice,.leafEl,.drop,.pot,.cup,#panel,#hero,.glow,.rays,.cupDisc,#wipeRing,#dripTop')) continue;
+        if (e.matches('.dust,.spark,.star,.drip,.dice,.leafEl,.drop,.pot,.cup,#panel,#hero,.glow,.rays,.cupDisc,#wipeRing,#dripTop,#photoA,#leak,#waRing')) continue;
         const r = e.getBoundingClientRect();
         if (r.left < -2 || r.right > 1082) out.push(`${(e.textContent || e.id || e.className).trim().slice(0, 40)} [${Math.round(r.left)}..${Math.round(r.right)}]`);
       }

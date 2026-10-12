@@ -321,6 +321,10 @@ def build(spec):
         roots = ["A1", "F1", "D1", "E1"]
         key_hits = [0, 3, 6, 10, 13]
         log_pat = [(2, 0), (7, 12), (10, 0), (11, 7), (14, 0)]
+    elif style == "nica":  # R&B chic en demi-tempo
+        prog = [["F3", "A3", "C4", "E4", "G4"], ["E3", "G3", "B3", "D4"], ["D3", "F3", "A3", "C4", "E4"], ["G3", "C4", "D4", "F4", "A4"]]
+        roots = ["F2", "E2", "D2", "G2"]
+        arp_pos = [0, 3, 6, 9, 12, 14]
     else:
         prog = [["F3", "A3", "C4", "E4"], ["G3", "B3", "D4", "E4"], ["E3", "G3", "B3", "D4"], ["A3", "C4", "E4", "G4"]]
         roots = ["F2", "G2", "E2", "A2"]
@@ -342,7 +346,38 @@ def build(spec):
         if mode == "outro" and t > dur:
             break
 
-        if mode == "full":
+        if style == "nica" and mode in ("full", "intro") and pos in arp_pos:
+            nt = chord[arp_pos.index(pos) % len(chord)] * 4
+            m = marimba(nt, 0.13 if mode == "full" else 0.16)
+            mus.add(m, t, pan=0.3)
+            mus.add(m, t + 0.25, 0.35, pan=-0.4)
+            verb.add(m, t, 0.45)
+        if mode == "full" and style == "nica":
+            if pos in (0, 10):
+                drums.add(kick(0.75, punch=0.8), t)
+                kicks.append(t)
+            if pos == 8:
+                c = clap(0.42)
+                drums.add(c, t, pan=0.05)
+                verb.add(c, t, 0.5)
+            if pos % 2 == 0:
+                drums.add(hat(0.09 if pos % 4 else 0.06), t + (0.02 if pos % 4 == 2 else 0), pan=-0.25)
+            if pos % 2 == 1:
+                drums.add(shaker(0.05), t, pan=0.35)
+            if pos == 0:
+                e = epiano(chord, beat * 3.6, 0.55, bright=1.1)
+                mus.add(e, t, pan=-0.15)
+                mus.add(e, t + 0.013, 0.5, pan=0.35)
+                verb.add(e, t, 0.35)
+                mus.add(pad(chord, 4 * beat + 0.3, 0.12, cutoff=2400), t)
+                mus.add(bass(root, beat * 1.7, 0.55), t)
+            if pos == 7:
+                mus.add(bass(root, six * 1.6, 0.4), t)
+            if pos == 10:
+                mus.add(bass(root * 2 ** (7 / 12), six * 2.5, 0.42), t)
+            if pos == 14:
+                mus.add(epiano(chord, 0.3, 0.28, bright=1.4), t, pan=0.2)
+        elif mode == "full":
             if pos % 4 == 0:
                 drums.add(kick(0.9 if style == "fruits" else 0.68), t)
                 kicks.append(t)
@@ -385,7 +420,7 @@ def build(spec):
                         verb.add(m, t, 0.3)
         elif mode == "intro":
             if pos == 0:
-                p_ = pad(chord, 4 * beat + 0.4, 0.22, cutoff=900 if style == "dore" else 600)
+                p_ = pad(chord, 4 * beat + 0.4, 0.22, cutoff={"dore": 900, "nica": 1500}.get(style, 600))
                 mus.add(p_, t)
                 verb.add(p_, t, 0.4)
             if style == "dore" and pos % 2 == 1:
@@ -421,7 +456,7 @@ def build(spec):
     # Pompe (sidechain) sur la musique à chaque grosse caisse
     duck = np.ones(n)
     dl = int(0.25 * SR)
-    shape = 1 - (0.45 if style == "fruits" else 0.3) * np.exp(-np.arange(dl) / SR / 0.09)
+    shape = 1 - {"fruits": 0.45, "nica": 0.22}.get(style, 0.3) * np.exp(-np.arange(dl) / SR / 0.09)
     for t in kicks:
         a = int(t * SR)
         b = min(n, a + dl)

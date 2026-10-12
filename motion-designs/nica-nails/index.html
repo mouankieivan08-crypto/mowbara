@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>NICA nail's — Motion</title>
+<link rel="stylesheet" href="../engine/stage.css">
+<style>
+  :root {
+    --g1: #fdf0c4; --g2: #e6bb62; --g3: #a8721f;
+    --pink: #f4a6c6; --pink-2: #e75a95; --cream: #f6ead8; --ink: #0b0907;
+  }
+  #bg { position: absolute; inset: 0; background: radial-gradient(1100px 1300px at 50% 42%, #221810 0%, #110c08 50%, #050403 100%); }
+  #vignette { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(130% 90% at 50% 50%, transparent 55%, rgba(0,0,0,.6) 100%); }
+  #flash { position: absolute; inset: 0; background: #fff5df; pointer-events: none; opacity: 0; }
+
+  .gold {
+    background-image:
+      linear-gradient(110deg, transparent 42%, rgba(255,255,255,.95) 50%, transparent 58%),
+      linear-gradient(180deg, var(--g1) 0%, var(--g2) 45%, var(--g3) 100%);
+    background-size: 300% 100%, 100% 100%; background-position: 100% 0, 0 0; background-repeat: no-repeat;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    filter: drop-shadow(0 4px 0 rgba(70, 40, 5, .85)) drop-shadow(0 0 24px rgba(230, 187, 98, .35));
+  }
+  .cinzel { font-family: 'Cinzel'; font-weight: 700; }
+  .vibes { font-family: 'Great Vibes'; font-weight: 400; }
+  .pop { font-family: 'Poppins'; }
+  .dust { width: 7px; height: 7px; border-radius: 50%; background: #ffe2a0; box-shadow: 0 0 10px 2px rgba(255, 210, 120, .7); }
+  .spark { width: 12px; height: 12px; border-radius: 50%; }
+  .star svg { width: 60px; height: 60px; filter: drop-shadow(0 0 10px rgba(255, 236, 190, .9)); }
+
+  /* S1 */
+  #photoA { width: 1697px; height: 1920px; -webkit-mask-image: linear-gradient(180deg, #000 72%, transparent 96%); mask-image: linear-gradient(180deg, #000 72%, transparent 96%); }
+  #photoA img { width: 100%; height: 100%; }
+  #shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.1) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,.6) 60%, rgba(5,4,3,.95) 72%); opacity: 0; }
+  #leak { width: 600px; height: 2600px; background: linear-gradient(90deg, transparent, rgba(255, 220, 150, .35), rgba(255, 245, 220, .55), rgba(255, 220, 150, .35), transparent); }
+  #chip { padding: 14px 44px 16px; border-radius: 60px; background: linear-gradient(180deg, #f7b6d1, #e75a95); color: #fff; font-family: 'Poppins'; font-weight: 800; font-size: 50px; box-shadow: 0 14px 34px rgba(231, 90, 149, .45); }
+
+  /* Logo */
+  #logoG { width: 1000px; height: 640px; }
+  #logoG > * { position: absolute; left: 50%; }
+  #crown { top: 0; width: 170px; height: 120px; margin-left: -85px; }
+  #nica { top: 105px; font-size: 250px; line-height: 1; transform-origin: center; }
+  #nails { top: 345px; font-size: 200px; line-height: 1; }
+  #crown svg, .crownBox svg { display: block; width: 100%; height: 100%; }
+  #frameSvg { position: absolute; inset: 0; pointer-events: none; }
+
+  /* S3 */
+  #arch { width: 760px; height: 1120px; padding: 8px; border-radius: 380px 380px 46px 46px; background: linear-gradient(160deg, #fdf0c4, #c99437 40%, #fbe3a0 60%, #a8721f); box-shadow: 0 30px 80px rgba(0,0,0,.7), 0 0 60px rgba(230, 187, 98, .2); }
+  #archIn { position: relative; width: 100%; height: 100%; border-radius: 372px 372px 40px 40px; overflow: hidden; background: #000; }
+  #archIn img { position: absolute; left: 50%; top: 50%; transform-origin: center; }
+  #archShine { position: absolute; top: -10%; width: 260px; height: 120%; background: linear-gradient(90deg, transparent, rgba(255,240,200,.55), transparent); transform: skewX(-18deg); }
+  .label { padding: 16px 48px 14px; border-radius: 60px; background: rgba(12, 9, 7, .92); border: 3px solid var(--g2); font-family: 'Cinzel'; font-weight: 700; font-size: 44px; color: var(--g1); letter-spacing: 2px; box-shadow: 0 16px 40px rgba(0,0,0,.6); }
+
+  /* S4 */
+  .card {
+    width: 1000px; height: 254px; padding: 22px 26px; display: flex; gap: 28px; align-items: center; border-radius: 30px;
+    background: linear-gradient(180deg, #1b150f, #0f0b08); border: 2px solid rgba(230, 187, 98, .75);
+    box-shadow: 0 20px 44px rgba(0,0,0,.55), inset 0 1px 0 rgba(255, 240, 200, .15);
+  }
+  .card .th { width: 345px; height: 208px; flex: none; border-radius: 18px; overflow: hidden; border: 2px solid var(--g2); }
+  .card .th img { width: 100%; height: 100%; object-fit: cover; }
+  .card .tx { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 10px; white-space: normal; }
+  .card .nm { display: flex; align-items: center; gap: 16px; font-family: 'Poppins'; font-weight: 700; font-size: 33px; line-height: 1.18; color: #fff; }
+  .card .nb { flex: none; width: 54px; height: 54px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Cinzel'; font-weight: 800; font-size: 30px; color: #2a1a05; background: radial-gradient(circle at 35% 30%, #fff1c8, #e6bb62 55%, #a8721f); }
+  .card .pr { display: flex; align-items: baseline; gap: 12px; }
+  .card .pr b { font-family: 'Cinzel'; font-weight: 800; font-size: 68px; line-height: 1; }
+  .card .pr span { font-family: 'Poppins'; font-weight: 600; font-size: 28px; color: var(--cream); }
+  .card .pr i { font-family: 'Great Vibes'; font-style: normal; font-size: 46px; color: var(--pink); margin-right: 6px; }
+
+  /* S6 */
+  #book { width: 920px; padding: 30px 40px; border-radius: 34px; background: linear-gradient(180deg, #19130d, #0e0a07); border: 2px solid rgba(230, 187, 98, .8); box-shadow: 0 26px 60px rgba(0,0,0,.6); }
+  .brow { display: flex; align-items: center; gap: 28px; height: 116px; font-family: 'Poppins'; font-weight: 600; font-size: 44px; color: var(--cream); }
+  .brow .bi { flex: none; width: 72px; height: 72px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: radial-gradient(circle at 35% 30%, #fff1c8, #e6bb62 55%, #a8721f); }
+  .brow .bi svg { width: 40px; height: 40px; }
+  .brow + .brow { border-top: 1px solid rgba(230, 187, 98, .25); }
+
+  /* S7 */
+  #heroC { width: 470px; height: 470px; border-radius: 50%; padding: 8px; background: conic-gradient(from 0deg, #fdf0c4, #a8721f, #fbe3a0, #c99437, #fdf0c4); box-shadow: 0 26px 70px rgba(0,0,0,.7), 0 0 70px rgba(230, 187, 98, .3); }
+  #heroC div { width: 100%; height: 100%; border-radius: 50%; overflow: hidden; }
+  #heroC img { width: 100%; height: 100%; object-fit: cover; object-position: 55% 40%; }
+  #wa {
+    display: flex; align-items: center; gap: 26px; padding: 22px 56px 22px 34px; border-radius: 120px;
+    background: linear-gradient(180deg, #34d873, #14a04f); box-shadow: 0 0 0 5px rgba(253, 240, 196, .9), 0 24px 60px rgba(20, 160, 79, .45);
+  }
+  #wa svg { width: 100px; height: 100px; }
+  #wa span { font-family: 'Poppins'; font-weight: 800; font-size: 92px; color: #fff; letter-spacing: 1px; line-height: 1.1; }
+  #waRing { width: 300px; height: 300px; border-radius: 50%; border: 8px solid rgba(52, 216, 115, .8); }
+</style>
+</head>
+<body>
+<div id="stage-wrap"><div id="stage">
+  <div id="bg"></div>
+  <div id="cam"></div>
+  <div id="vignette"></div>
+  <div id="flash"></div>
+</div></div>
+
+<script src="../engine/motion.js"></script>
+<script>
+const { kf, p, win, set, el, split, rng, wobble, shake, E, clamp, lerp } = M;
+const cam = document.getElementById('cam');
+const flash = document.getElementById('flash');
+
+/* ---------- Données (affiche des tarifs) ---------- */
+const PHONE = '06 482 63 87';
+const SERVICES = [
+  ['VERNIS PERMANENT', '3 000', true],
+  ['GAINAGE DES PIEDS', '4 000'],
+  ['POSE GEL AVEC RALLONGEMENT + NAIL ART', '5 000'],
+  ['POSE GEL AVEC PEU DE RALLONGEMENT', '4 000'],
+  ['GAINAGE SUR ONGLES NATURELS AVEC FRENCH', '4 000'],
+  ['GAINAGE SUR ONGLES NATURELS AVEC VERNIS', '4 000'],
+  ['POSE AMÉRICAINE AVEC RALLONGEMENT + NAIL ART', '5 000'],
+  ['POSE AMÉRICAINE AVEC VERNIS', '3 000'],
+];
+const BOOK = ['Votre nom', 'La prestation souhaitée', 'La date et l’heure désirées', 'Une photo d’inspiration'];
+
+/* ---------- Icônes ---------- */
+const GOLD_DEF = '<defs><linearGradient id="gg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fdf0c4"/><stop offset=".5" stop-color="#e6bb62"/><stop offset="1" stop-color="#a8721f"/></linearGradient></defs>';
+const CROWN = `<svg viewBox="0 0 170 120">${GOLD_DEF}<path d="M22 100 12 34l40 30 33-52 33 52 40-30-10 66z" fill="url(#gg)" stroke="#6e4810" stroke-width="3" stroke-linejoin="round"/><rect x="20" y="98" width="130" height="14" rx="5" fill="url(#gg)" stroke="#6e4810" stroke-width="3"/><circle cx="12" cy="30" r="9" fill="url(#gg)"/><circle cx="85" cy="10" r="10" fill="url(#gg)"/><circle cx="158" cy="30" r="9" fill="url(#gg)"/><circle cx="85" cy="76" r="8" fill="#e75a95"/></svg>`;
+const STAR = '<svg viewBox="0 0 24 24"><path d="M12 0c1 8 4 11 12 12-8 1-11 4-12 12-1-8-4-11-12-12 8-1 11-4 12-12z" fill="#fff6dc"/></svg>';
+const WA = '<svg viewBox="0 0 32 32"><path fill="#fff" d="M16 3a13 13 0 0 0-11.2 19.6L3 29l6.6-1.7A13 13 0 1 0 16 3z"/><path fill="#14a04f" d="M22.6 19.4c-.4-.2-2.1-1-2.4-1.1-.3-.1-.6-.2-.8.2l-1.1 1.4c-.2.2-.4.3-.8.1a9 9 0 0 1-4.4-3.9c-.3-.6.3-.5 1-1.7.1-.2 0-.4 0-.6l-1.1-2.6c-.3-.7-.6-.6-.8-.6h-.7c-.2 0-.6.1-.9.4-.3.4-1.2 1.2-1.2 2.9s1.2 3.3 1.4 3.6c.2.2 2.4 3.7 5.8 5.1 2.2.9 3 1 4.1.8.7-.1 2.1-.9 2.4-1.7.3-.8.3-1.6.2-1.7-.1-.2-.4-.3-.7-.5z"/></svg>';
+const ic = (d) => `<svg viewBox="0 0 24 24" fill="none" stroke="#2a1a05" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
+const BOOK_IC = [
+  ic('<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/>'),
+  ic('<path d="M12 3l2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.6 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/>'),
+  ic('<rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/>'),
+  ic('<rect x="3" y="6" width="18" height="14" rx="2.5"/><circle cx="12" cy="13" r="3.6"/><path d="M8.5 6l1.4-2.2h4.2L15.5 6"/>'),
+];
+
+/* ---------- Construction ---------- */
+const dust = [];
+{ const R = rng(9);
+  for (let i = 0; i < 44; i++) dust.push({ e: el(cam, 'dust'), x: R() * 1080, y: R() * 1920, v: 25 + R() * 70, s: 0.4 + R(), ph: R() * 6.28, sw: 10 + R() * 30 }); }
+
+// S1 — photo plein écran
+const photoA = el(cam, '', '<img src="../assets/src/nica-photo-gold.jpg">'); photoA.id = 'photoA'; photoA.className = 'm';
+const shade = document.createElement('div'); shade.id = 'shade'; cam.appendChild(shade);
+const leak = el(cam, ''); leak.id = 'leak';
+const h1 = el(cam, 'pop', 'Envie d’ongles', 'font-weight:800;font-size:80px;color:#fff;text-shadow:0 6px 24px rgba(0,0,0,.7)');
+const h2 = el(cam, 'vibes gold', 'de reine ?', 'font-size:230px;line-height:1.2;padding:0 30px');
+const h2crown = el(cam, 'crownBox', CROWN, 'width:150px;height:106px');
+const chip = el(cam, '', 'dès 3 000 FCFA'); chip.id = 'chip'; chip.className = 'm';
+const stars = [];
+{ const R = rng(21);
+  for (let i = 0; i < 12; i++) stars.push({ e: el(cam, 'star', STAR), x: 80 + R() * 920, y: 200 + R() * 1450, ph: R() * 6.28, sp: 1.5 + R() * 2, s: 0.4 + R() * 0.8 }); }
+
+function makeBurst(n, seed, colors) {
+  const R = rng(seed), parts = [];
+  for (let i = 0; i < n; i++) {
+    const a = R() * Math.PI * 2, sp = 450 + R() * 1200, c = colors[i % colors.length];
+    parts.push({ e: el(cam, 'spark', '', `background:${c};box-shadow:0 0 14px ${c}`), vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 250, s: 0.4 + R() * 1.1, life: 0.6 + R() * 0.6 });
+  }
+  return (t, t0, x, y) => {
+    for (const q of parts) {
+      const d = t - t0;
+      if (d < 0 || d > q.life) { set(q.e, { o: 0 }); continue; }
+      const k = d / q.life;
+      set(q.e, { x: x + q.vx * d * (1 - k * 0.45), y: y + q.vy * d + 800 * d * d, s: q.s * (1 - k), o: 1 - k * k });
+    }
+  };
+}
+const burstA = makeBurst(40, 31, ['#ffe2a0', '#fff6dc', '#f4a6c6']);
+const burstB = makeBurst(44, 32, ['#ffe2a0', '#fff6dc', '#e6bb62', '#f4a6c6']);
+
+// Cadre ornemental (dessiné à partir de la révélation du logo)
+const frameSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+frameSvg.id = 'frameSvg';
+frameSvg.setAttribute('viewBox', '0 0 1080 1920');
+frameSvg.innerHTML = `${GOLD_DEF}
+  <path id="fr1" pathLength="1" d="M70 34H1010A36 36 0 0 1 1046 70V1850A36 36 0 0 1 1010 1886H70A36 36 0 0 1 34 1850V70A36 36 0 0 1 70 34Z" fill="none" stroke="url(#gg)" stroke-width="3"/>
+  <path id="fr2" pathLength="1" d="M76 50H1004A26 26 0 0 1 1030 76V1844A26 26 0 0 1 1004 1870H76A26 26 0 0 1 50 1844V76A26 26 0 0 1 76 50Z" fill="none" stroke="rgba(230,187,98,.45)" stroke-width="1.5"/>`;
+cam.appendChild(frameSvg);
+const fr = [frameSvg.querySelector('#fr1'), frameSvg.querySelector('#fr2')];
+fr.forEach((f) => (f.style.strokeDasharray = '1'));
+
+// S2 — logo
+const welcome = el(cam, 'vibes gold', 'Bienvenue chez', 'font-size:96px;padding:0 20px');
+const logoG = el(cam, ''); logoG.id = 'logoG';
+logoG.innerHTML = `<div id="crown">${CROWN}</div><div id="nica" class="cinzel gold">NICA</div><div id="nails" class="vibes gold">nail’s</div>`;
+const crown = logoG.querySelector('#crown'), nica = logoG.querySelector('#nica'), nails = logoG.querySelector('#nails');
+const divider = el(cam, '', `<svg width="560" height="30" viewBox="0 0 560 30">${GOLD_DEF}<path d="M0 15H245M315 15H560" stroke="#e6bb62" stroke-width="3"/><path d="M280 2l13 13-13 13-13-13z" fill="url(#gg)"/></svg>`);
+const tag1 = el(cam, 'pop', 'Nous prenons soin de vos ongles ✨', 'font-weight:600;font-size:46px;color:#f6ead8');
+
+// S3 — réalisations
+const s3t = el(cam, 'vibes gold', 'Nos réalisations', 'font-size:120px;padding:0 24px');
+const arch = el(cam, '', `<div id="archIn"><img id="imA" src="../assets/src/nica-photo-french.jpg"><img id="imB" src="../assets/src/nica-photo-gold.jpg"><div id="archShine"></div></div>`); arch.id = 'arch';
+const imA = arch.querySelector('#imA'), imB = arch.querySelector('#imB'), archShine = arch.querySelector('#archShine');
+const IW = 744, IH = 1104; // intérieur du cadre
+const fitA = Math.max(IW / 608, IH / 1080), fitB = Math.max(IW / 1131, IH / 1280);
+imA.style.width = 608 * fitA + 'px'; imA.style.height = 1080 * fitA + 'px';
+imB.style.width = 1131 * fitB + 'px'; imB.style.height = 1280 * fitB + 'px';
+const labA = el(cam, 'label', 'FRENCH & NAIL ART');
+const labB = el(cam, 'label', 'FLEURS 3D & TOUCHES DORÉES');
+
+// S4 — prestations
+const s4t = el(cam, '', `<div class="cinzel gold" style="font-size:66px;letter-spacing:3px;text-align:center;line-height:1.1">NOS PRESTATIONS</div><div class="vibes gold" style="font-size:92px;text-align:center;line-height:1;padding:0 20px">& tarifs</div>`, 'display:flex;flex-direction:column;align-items:center');
+const cards = SERVICES.map(([n, pr, from], i) => el(cam, 'card',
+  `<div class="th"><img src="../assets/cut/nica-s${i + 1}.webp"></div>
+   <div class="tx"><div class="nm"><div class="nb">${i + 1}</div><div>${n}</div></div>
+   <div class="pr">${from ? '<i>à partir de</i>' : ''}<b class="gold">${pr}</b><span>FCFA</span></div></div>`));
+const cardPrice = cards.map((c) => c.querySelector('.pr b'));
+const CARD_Y = [580, 858, 1136, 1414];
+
+// S5 — prix d'appel
+const s5a = el(cam, 'vibes', 'À partir de', 'font-size:140px;color:#f4a6c6;text-shadow:0 0 30px rgba(231,90,149,.45);padding:0 20px');
+const s5b = el(cam, 'cinzel gold', '3 000', 'font-size:290px;font-weight:800;line-height:1.05');
+const s5c = el(cam, 'cinzel', 'FCFA', 'font-size:96px;color:#f6ead8;letter-spacing:24px;font-weight:600');
+const s5d = el(cam, 'pop', 'Mains & pieds sublimés ✨', 'font-weight:600;font-size:48px;color:#f6ead8');
+
+// S6 — réservation
+const s6a = el(cam, 'pop', 'Pour prendre rendez-vous,', 'font-weight:700;font-size:56px;color:#fff');
+const s6b = el(cam, 'vibes gold', 'envoyez-nous :', 'font-size:120px;padding:0 24px');
+const book = el(cam, '', BOOK.map((b, i) => `<div class="brow"><div class="bi">${BOOK_IC[i]}</div><span>${b}</span></div>`).join('')); book.id = 'book'; book.className = 'm';
+const bookRows = Array.from(book.querySelectorAll('.brow'));
+const s6c = el(cam, 'pop', 'Réponse dans les plus brefs délais', 'font-weight:600;font-size:42px;color:#f6ead8;opacity:.9');
+
+// S7 — appel à l'action
+const heroC = el(cam, '', '<div><img src="../assets/cut/nica-hero.webp"></div>'); heroC.id = 'heroC'; heroC.className = 'm';
+const c1 = el(cam, 'cinzel gold', 'RÉSERVEZ MAINTENANT', 'font-size:62px;letter-spacing:3px');
+const waRing = el(cam, ''); waRing.id = 'waRing';
+const wa = el(cam, '', `${WA}<span>${PHONE}</span>`); wa.id = 'wa'; wa.className = 'm';
+const waIcon = wa.querySelector('svg');
+const c2 = el(cam, 'pop', 'Contactez-nous sur WhatsApp', 'font-weight:600;font-size:44px;color:#f6ead8');
+const c3 = el(cam, 'vibes gold', 'Merci de votre confiance', 'font-size:96px;padding:0 20px');
+const c4 = el(cam, 'vibes gold', 'et à très bientôt !', 'font-size:80px;padding:0 20px');
+
+/* ---------- Rendu ---------- */
+const BEAT = 0.5;
+const shine = (e, t, t0, d = 0.8) => { e.style.backgroundPosition = `${kf(t, [t0, 110], [t0 + d, -20, 'linear']).toFixed(1)}% 0, 0 0`; };
+
+function render(t) {
+  const groove = (t > 3.0 && t < 20.0) || (t > 20.5 && t < 28.6);
+  const bf = (t / BEAT) % 1;
+  const bump = groove ? Math.exp(-bf * 7) * 0.008 : 0;
+  let sx = 0, sy = 0, sr = 0;
+  for (const [t0, d, a] of [[3.0, 0.3, 10], [20.9, 0.4, 24], [26.8, 0.3, 10]]) {
+    const [a1, b1, c] = shake(t, t0, d, a); sx += a1; sy += b1; sr += c;
+  }
+  cam.style.transform = `translate(${sx.toFixed(2)}px,${sy.toFixed(2)}px) rotate(${sr.toFixed(3)}deg) scale(${(1 + bump).toFixed(4)})`;
+  flash.style.opacity = Math.max(kf(t, [0, 1], [0.35, 0]), kf(t, [20.88, 0], [20.9, 0.16], [21.1, 0])).toFixed(3);
+
+  // Poussière d'or & étoiles
+  const dustO = kf(t, [2.8, 0.25], [3.4, 1]);
+  for (const d of dust) {
+    const y = ((d.y - t * d.v) % 2000 + 2000) % 2000 - 40;
+    set(d.e, { x: d.x + Math.sin(t * 0.8 + d.ph) * d.sw, y, s: d.s, o: dustO * (0.3 + 0.7 * Math.abs(Math.sin(t * 1.6 + d.ph))) });
+  }
+  stars.forEach((s, i) => {
+    const tw = Math.max(0, Math.sin(t * s.sp + s.ph)) ** 6;
+    set(s.e, { x: s.x, y: s.y, s: s.s * (0.3 + tw), r: t * 40 + i * 20, o: tw * (t < 2.9 || (t > 6 && t < 12) ? 1 : 0.3) });
+  });
+
+  /* S1 — accroche sur photo */
+  const s1out = p(t, 2.7, 0.35, 'inCubic');
+  const kb = p(t, 0, 3.1);
+  set(photoA, { x: lerp(700, 560, kb), y: 380 - kb * 50, s: lerp(1.22, 1.02, E.outCubic(kb)) + s1out * 0.15, o: t < 3.05 ? 1 - s1out : 0 });
+  shade.style.opacity = (t < 3.05 ? kf(t, [0.2, 0], [0.8, 1]) * (1 - s1out) : 0).toFixed(3);
+  set(leak, { x: kf(t, [1.9, -500], [2.7, 1600, 'inOutCubic']), y: 960, r: 18, o: t > 1.9 && t < 2.7 ? 1 : 0 });
+  set(h1, { x: 540, y: kf(t, [0.5, 1240], [0.85, 1180, 'outBack']) - s1out * 200, o: clamp((t - 0.5) / 0.2) * (1 - s1out) });
+  h2.style.clipPath = `inset(-30% ${((1 - p(t, 0.95, 0.55, 'outCubic')) * 100).toFixed(1)}% -30% 0)`;
+  shine(h2, t, 1.6, 0.7);
+  set(h2, { x: 540, y: 1355 - s1out * 200, o: t > 0.95 ? 1 - s1out : 0 });
+  set(h2crown, { x: 880, y: kf(t, [1.35, 1060], [1.65, 1272, 'outBack']) - s1out * 200, r: kf(t, [1.35, -30], [1.7, 14, 'outBack']), s: kf(t, [1.35, 0.3], [1.65, 1, 'outBack']), o: t > 1.35 ? 1 - s1out : 0 });
+  set(chip, { x: 540, y: 1545 - s1out * 200, s: kf(t, [1.8, 0], [2.1, 1, 'outBackStrong']) * (1 - s1out * 0.3), o: t > 1.8 ? 1 - s1out : 0 });
+
+  /* Cadre ornemental */
+  const frO = t > 3.0 ? 1 : 0;
+  fr.forEach((f, i) => { f.style.strokeDashoffset = (1 - p(t, 3.05 + i * 0.12, 0.9, 'inOutCubic')).toFixed(4); });
+  frameSvg.style.opacity = frO;
+
+  /* Logo : révélation → en-tête → appel à l'action */
+  const toHead = p(t, 5.8, 0.5, 'inOutCubic');
+  const toCta = p(t, 25.9, 0.6, 'inOutCubic');
+  let ly = lerp(860, 165, toHead), ls = lerp(1, 0.27, toHead);
+  if (t > 25.9) { ly = lerp(165, 300, toCta); ls = lerp(0.27, 0.5, toCta); }
+  set(logoG, { x: 540, y: ly, s: ls * (1 + bump * 1.5), o: t > 3.2 ? 1 : 0 });
+  crown.style.transform = `translateY(${kf(t, [3.25, -260], [3.65, 0, 'outBack']).toFixed(1)}px) rotate(${(wobble(t, 4, 0.6) * 3).toFixed(2)}deg)`;
+  crown.style.opacity = clamp((t - 3.25) / 0.15).toFixed(2);
+  nica.style.letterSpacing = kf(t, [3.4, 90], [4.1, 18, 'outCubic']).toFixed(1) + 'px';
+  nica.style.marginLeft = -nica.offsetWidth / 2 + 'px';
+  nica.style.opacity = clamp((t - 3.4) / 0.4).toFixed(2);
+  nica.style.filter = `blur(${kf(t, [3.4, 14], [3.95, 0, 'outCubic']).toFixed(1)}px) drop-shadow(0 4px 0 rgba(70,40,5,.85)) drop-shadow(0 0 24px rgba(230,187,98,.35))`;
+  shine(nica, t, t < 20 ? 4.3 : 26.6, 0.9);
+  nails.style.marginLeft = -nails.offsetWidth / 2 + 90 + 'px';
+  nails.style.clipPath = `inset(-30% ${((1 - p(t, 3.95, 0.6, 'outCubic')) * 100).toFixed(1)}% -30% 0)`;
+  nails.style.transform = 'rotate(-5deg)';
+  const s2o = win(t, 2.95, 6.0, 0.3, 0.25);
+  set(welcome, { x: 540, y: kf(t, [2.95, 520], [3.3, 470, 'outCubic']), o: s2o });
+  divider.firstChild.style.clipPath = `inset(0 ${((1 - p(t, 4.45, 0.45, 'outCubic')) * 50).toFixed(1)}% 0 ${((1 - p(t, 4.45, 0.45, 'outCubic')) * 50).toFixed(1)}%)`;
+  set(divider, { x: 540, y: 1235, o: s2o });
+  set(tag1, { x: 540, y: kf(t, [4.65, 1350], [4.95, 1320, 'outBack']), o: Math.min(s2o, clamp((t - 4.65) / 0.25)) });
+  burstA(t, 3.45, 540, 870);
+
+  /* S3 — réalisations */
+  const s3o = win(t, 6.05, 12.05, 0.35, 0.3);
+  set(s3t, { x: 540, y: kf(t, [6.05, 380], [6.4, 330, 'outBack']), o: s3o });
+  const archOut = p(t, 11.8, 0.3, 'inCubic');
+  set(arch, { x: 540 - archOut * 900, y: kf(t, [6.05, 1250], [6.55, 1010, 'outBack']), s: kf(t, [6.05, 0.82], [6.55, 1, 'outBack']) * (1 + bump * 1.2), r: -archOut * 12, o: t > 6.05 && t < 12.15 ? 1 : 0 });
+  const ka = p(t, 6.0, 3.2), kbb = p(t, 8.9, 3.3);
+  imA.style.transform = `translate(-50%,-50%) translate(${lerp(0, -30, ka).toFixed(1)}px,${lerp(80, -60, ka).toFixed(1)}px) scale(${lerp(1.18, 1.02, E.outCubic(ka)).toFixed(4)})`;
+  imB.style.transform = `translate(-50%,-50%) translate(${lerp(150, -150, E.inOutCubic(kbb)).toFixed(1)}px,-215px) scale(${lerp(1.42, 1.34, kbb).toFixed(4)})`;
+  imB.style.opacity = p(t, 8.85, 0.4, 'inOutCubic').toFixed(3);
+  archShine.style.left = kf(t, [6.5, -300], [7.3, 800, 'inOutCubic'], [8.85, -300], [9.4, 800, 'inOutCubic']).toFixed(1) + 'px';
+  const la = win(t, 6.5, 8.9, 0.3, 0.2), lb = win(t, 9.15, 11.9, 0.3, 0.2);
+  set(labA, { x: 540, y: 1570, s: kf(t, [6.5, 0.6], [6.8, 1, 'outBack']), o: la });
+  set(labB, { x: 540, y: 1570, s: kf(t, [9.15, 0.6], [9.45, 1, 'outBack']), o: lb });
+
+  /* S4 — prestations & tarifs */
+  const s4o = win(t, 12.0, 20.45, 0.3, 0.3);
+  set(s4t, { x: 540, y: kf(t, [12.0, 300], [12.35, 345, 'outBack']), o: s4o });
+  cards.forEach((c, i) => {
+    const g = i < 4 ? 0 : 1, k = i % 4;
+    const tin = (g ? 16.3 : 12.2) + k * 0.35, tout = (g ? 20.1 : 16.0) + k * 0.06;
+    const qi = p(t, tin, 0.5, 'outBack'), qo = p(t, tout, 0.35, 'inBack');
+    set(c, { x: lerp(1600, 540, qi) - qo * 1300, y: CARD_Y[k] + Math.sin(t * 2 + i) * 3, r: (1 - qi) * 6 - qo * 6, o: t >= tin && t < tout + 0.35 ? 1 : 0 });
+    shine(cardPrice[i], t, tin + 0.35, 0.6);
+  });
+
+  /* S5 — à partir de 3 000 FCFA */
+  const s5o = win(t, 20.5, 23.0, 0.2, 0.3);
+  set(s5a, { x: 540, y: kf(t, [20.5, 820], [20.8, 760, 'outBack']), o: s5o });
+  set(s5b, { x: 540, y: 960, s: kf(t, [20.75, 2.2], [20.95, 1, 'outCubic'], [21.1, 1.06], [21.3, 1, 'outBack']) * (1 + bump * 2), o: s5o * (t > 20.75 ? 1 : 0) });
+  shine(s5b, t, 21.3, 0.8);
+  burstB(t, 20.92, 540, 960);
+  set(s5c, { x: 540, y: kf(t, [21.05, 1200], [21.35, 1150, 'outBack']), o: s5o * clamp((t - 21.05) / 0.2) });
+  set(s5d, { x: 540, y: 1300, o: s5o * clamp((t - 21.5) / 0.3) });
+
+  /* S6 — comment réserver */
+  const s6o = win(t, 23.0, 25.95, 0.3, 0.3);
+  set(s6a, { x: 540, y: kf(t, [23.0, 430], [23.3, 390, 'outBack']), o: s6o });
+  set(s6b, { x: 540, y: 505, o: s6o * clamp((t - 23.15) / 0.25) });
+  set(book, { x: 540, y: kf(t, [23.25, 1000], [23.6, 920, 'outBack']), o: s6o * clamp((t - 23.25) / 0.2) });
+  bookRows.forEach((row, i) => {
+    const q = p(t, 23.55 + i * 0.4, 0.35, 'outBack');
+    row.style.opacity = (0.15 + 0.85 * clamp(q * 2)).toFixed(2);
+    row.style.transform = `translateX(${((1 - q) * 40).toFixed(1)}px)`;
+    row.querySelector('.bi').style.transform = `scale(${(0.4 + 0.6 * q).toFixed(3)})`;
+  });
+  set(s6c, { x: 540, y: 1290, o: s6o * clamp((t - 25.1) / 0.25) });
+
+  /* S7 — réservez sur WhatsApp */
+  set(heroC, { x: 540, y: 725 + Math.sin(t * 2) * 6, s: kf(t, [25.92, 0], [26.4, 1, 'outBackStrong']) * (1 + bump * 1.5), r: kf(t, [25.92, -20], [26.45, 0, 'outBack']), o: t > 25.92 ? 1 : 0 });
+  heroC.style.background = `conic-gradient(from ${(t * 60).toFixed(1)}deg, #fdf0c4, #a8721f, #fbe3a0, #c99437, #fdf0c4)`;
+  set(c1, { x: 540, y: kf(t, [26.45, 1060], [26.75, 1030, 'outBack']), o: clamp((t - 26.45) / 0.2) });
+  shine(c1, t, 27.0, 0.8);
+  set(wa, { x: 540, y: 1175, s: kf(t, [26.75, 0.3], [27.1, 1, 'outBackStrong']) * (1 + bump * 2.5), o: t > 26.75 ? clamp((t - 26.75) / 0.1) : 0 });
+  waIcon.style.transform = `rotate(${(t > 27.3 ? Math.sin(t * 50) * 10 * Math.max(0, Math.sin(((t - 27.3) * Math.PI) / 1.0)) ** 8 : 0).toFixed(2)}deg)`;
+  const rq = ((t - 27.2) % 1.0) / 1.0;
+  set(waRing, { x: 540, y: 1175, sx: 2.4 + rq * 0.8, sy: 0.6 + rq * 0.4, o: t > 27.2 ? (1 - rq) * 0.8 : 0 });
+  set(c2, { x: 540, y: 1310, o: clamp((t - 27.15) / 0.25) });
+  set(c3, { x: 540, y: kf(t, [27.5, 1460], [27.8, 1430, 'outCubic']), o: clamp((t - 27.5) / 0.3) });
+  set(c4, { x: 540, y: kf(t, [27.75, 1550], [28.05, 1525, 'outCubic']), o: clamp((t - 27.75) / 0.3) });
+}
+
+M.run({
+  duration: 30.0,
+  render,
+  audio: '../output/nica-nails.wav',
+  music: { style: 'nica', bpm: 120, cover: 29.2, sections: [[0, 'intro'], [3.0, 'full'], [20.0, 'break'], [20.5, 'full'], [28.0, 'outro']] },
+  cues: [
+    [0.0, 'sparkle'], [0.5, 'swish'], [0.95, 'swish'], [1.35, 'pop'], [1.6, 'sparkle'], [1.8, 'pop'], [1.95, 'whoosh'], [2.45, 'riser'],
+    [3.0, 'impact_soft'], [3.15, 'swish'], [3.3, 'thud'], [3.45, 'sparkle'], [3.95, 'swish'], [4.45, 'pop'], [4.65, 'swish'],
+    [5.8, 'whoosh'], [6.05, 'thud'], [6.5, 'pop'], [8.85, 'whoosh'], [8.9, 'sparkle'], [9.15, 'pop'], [11.8, 'whoosh'], [12.0, 'swish'],
+    ...[0, 1, 2, 3].flatMap((k) => [[12.2 + k * 0.35, 'swish'], [12.6 + k * 0.35, 'pop']]),
+    [16.0, 'whoosh'],
+    ...[0, 1, 2, 3].flatMap((k) => [[16.3 + k * 0.35, 'swish'], [16.7 + k * 0.35, 'pop']]),
+    [19.95, 'riser'], [20.1, 'whoosh'], [20.5, 'swish'], [20.9, 'impact'], [20.92, 'sparkle'], [21.05, 'pop'], [21.5, 'swish'],
+    [22.95, 'whoosh'], [23.0, 'swish'], ...[0, 1, 2, 3].map((i) => [23.55 + i * 0.4, 'check']), [25.1, 'pop'],
+    [25.9, 'whoosh'], [26.05, 'thud'], [26.1, 'sparkle'], [26.45, 'swish'], [26.75, 'impact_soft'], [27.15, 'pop'], [27.3, 'ring'], [27.5, 'sparkle'], [28.0, 'end'],
+  ].map(([t, sfx]) => ({ t, sfx })),
+});
+</script>
+</body>
+</html>

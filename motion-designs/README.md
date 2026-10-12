@@ -1,4 +1,4 @@
-# Motion designs — Doré et Vous & Happy Fruits
+# Motion designs — Doré et Vous, Happy Fruits & NICA nail's
 
 Deux vidéos publicitaires verticales, prêtes à publier sur **TikTok, Instagram Reels, Statut WhatsApp et Facebook**.
 
@@ -6,6 +6,7 @@ Deux vidéos publicitaires verticales, prêtes à publier sur **TikTok, Instagra
 |---|---|---|---|---|
 | **Doré et Vous** | [`output/dore-et-vous.mp4`](output/dore-et-vous.mp4) | 1080×1920, 30 i/s, H.264 + AAC | 29,5 s | Particuliers (B2C), Brazzaville |
 | **Happy Fruits** | [`output/happy-fruits.mp4`](output/happy-fruits.mp4) | 1080×1920, 30 i/s, H.264 + AAC | 29,5 s | Entreprises (B2B), Congo-Brazzaville |
+| **NICA nail's** | [`output/nica-nails.mp4`](output/nica-nails.mp4) | 1080×1920, 30 i/s, H.264 + AAC | 30 s | Clientes du salon (B2C), réservation WhatsApp |
 
 Les vignettes de couverture sont dans `output/*-cover.jpg`.
 
@@ -52,9 +53,23 @@ Style frais crème / vert / orange, ton professionnel mais joyeux, pensé pour c
 >   ...
 > ```
 
+## 3. NICA nail's — « Envie d'ongles de reine ? »
+
+Style noir & or luxueux (comme l'affiche des tarifs), rose en accent, musique R&B chic.
+
+| Temps | Scène | Rôle commercial |
+|---|---|---|
+| 0–3 s | Gros plan photo (French + fleurs 3D + or), « Envie d'ongles **de reine ?** » + pastille **dès 3 000 FCFA** | **Accroche** : désir + prix d'appel |
+| 3–6 s | Cadre doré qui se dessine, « Bienvenue chez », couronne, **NICA** *nail's*, « Nous prenons soin de vos ongles ✨ » | Image de marque premium |
+| 6–12 s | « Nos réalisations » : vos 2 photos dans une arche dorée (French & nail art / Fleurs 3D & touches dorées) | Preuve du savoir-faire |
+| 12–20,5 s | « Nos prestations & tarifs » : les 8 prestations avec photo, numéro et prix, en 2 vagues de 4 | Toute l'offre, lisible |
+| 20,5–23 s | « À partir de **3 000 FCFA** » | Lève l'objection du prix |
+| 23–26 s | « Pour prendre rendez-vous, envoyez-nous : » nom, prestation, date & heure, photo d'inspiration | Réduit les allers-retours en message |
+| 26–30 s | Logo + photo en médaillon, **RÉSERVEZ MAINTENANT**, bouton WhatsApp **06 482 63 87**, « Merci de votre confiance » | Appel à l'action |
+
 ---
 
-## 3. Conseils de publication
+## 4. Conseils de publication
 
 **Textes prêts à copier-coller**
 
@@ -72,6 +87,13 @@ Style frais crème / vert / orange, ton professionnel mais joyeux, pensé pour c
 > 👉 Demandez votre devis entreprise en message privé.
 > #Brazzaville #Congo #Entreprise #BienÊtreAuTravail #FruitsFrais #HappyFruits
 
+*NICA nail's (TikTok / Reels / Statut WhatsApp) :*
+> 💅 Envie d'ongles de reine ? 👑
+> Vernis permanent, pose gel, pose américaine, French, nail art, fleurs 3D, gainage des pieds…
+> **À partir de 3 000 FCFA** ✨
+> 📲 Réservez sur WhatsApp au 06 482 63 87 : envoyez votre nom, la prestation, la date/heure et une photo d'inspiration.
+> #NailsBrazzaville #Brazzaville #Congo #Ongles #NailArt #PoseGel #FrenchManucure #NICAnails
+
 **Astuces**
 - Publiez aux heures de pointe (12h–14h et 19h–22h) et épinglez un commentaire avec le numéro.
 - Sur TikTok/Reels, vous pouvez baisser le son d'origine et ajouter un son tendance : les animations restent rythmées.
@@ -80,10 +102,10 @@ Style frais crème / vert / orange, ton professionnel mais joyeux, pensé pour c
 
 ---
 
-## 4. Modifier et ré-exporter
+## 5. Modifier et ré-exporter
 
 Les vidéos sont codées en HTML/JS : chaque texte, couleur ou timing se modifie directement dans
-`dore-et-vous/index.html` et `happy-fruits/index.html` (prix, numéro, saveurs, combos, phrases…).
+`dore-et-vous/index.html`, `happy-fruits/index.html` et `nica-nails/index.html` (prix, numéro, saveurs, combos, prestations, phrases…).
 
 **Prérequis :** Node 18+, Playwright (`npm i -g playwright` puis `npx playwright install chromium`), ffmpeg, Python 3 + numpy.
 
@@ -91,6 +113,7 @@ Les vidéos sont codées en HTML/JS : chaque texte, couleur ou timing se modifie
 cd motion-designs
 node engine/render.cjs dore-et-vous        # → output/dore-et-vous.mp4 (+ musique + vignette)
 node engine/render.cjs happy-fruits        # → output/happy-fruits.mp4
+node engine/render.cjs nica-nails          # → output/nica-nails.mp4
 node engine/render.cjs happy-fruits --stills 5,12,28   # captures PNG pour vérifier une modification
 node engine/check.cjs happy-fruits         # détecte les textes qui sortent du cadre
 ```
@@ -99,7 +122,7 @@ node engine/check.cjs happy-fruits         # détecte les textes qui sortent du 
 
 ```bash
 cd motion-designs && python3 -m http.server 8000
-# puis ouvrir http://localhost:8000/dore-et-vous/ ou http://localhost:8000/happy-fruits/
+# puis ouvrir http://localhost:8000/dore-et-vous/, /happy-fruits/ ou /nica-nails/
 ```
 
 ## Structure
@@ -108,6 +131,7 @@ cd motion-designs && python3 -m http.server 8000
 motion-designs/
 ├── dore-et-vous/index.html    # composition Doré et Vous
 ├── happy-fruits/index.html    # composition Happy Fruits (bloc CONFIG à personnaliser)
+├── nica-nails/index.html      # composition NICA nail's
 ├── engine/
 │   ├── motion.js              # moteur d'animation déterministe (images clés, easing, aperçu)
 │   ├── stage.css              # scène 1080×1920 + polices
@@ -116,7 +140,7 @@ motion-designs/
 │   └── check.cjs              # contrôle des débordements de texte
 ├── assets/
 │   ├── src/                   # visuels d'origine (logo, affiches)
-│   ├── cut/                   # produits détourés (pots, coupes, garnitures, logo)
-│   └── fonts/                 # Anton, Permanent Marker, Kaushan Script, Fredoka, Poppins, Pacifico (licence OFL/Apache)
+│   ├── cut/                   # produits détourés (pots, coupes, garnitures, logo), vignettes des prestations NICA
+│   └── fonts/                 # Anton, Permanent Marker, Kaushan Script, Fredoka, Poppins, Pacifico, Cinzel, Great Vibes (licence OFL/Apache)
 └── output/                    # vidéos MP4 + vignettes
 ```

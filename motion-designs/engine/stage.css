@@ -2,7 +2,8 @@
 @font-face { font-family: 'Permanent Marker'; src: url('../assets/fonts/PermanentMarker-Regular.ttf'); }
 @font-face { font-family: 'Kaushan Script'; src: url('../assets/fonts/KaushanScript-Regular.ttf'); }
 @font-face { font-family: 'Pacifico'; src: url('../assets/fonts/Pacifico-Regular.ttf'); }
-@font-face { font-family: 'Caveat Brush'; src: url('../assets/fonts/CaveatBrush-Regular.ttf'); }
+@font-face { font-family: 'Cinzel'; src: url('../assets/fonts/Cinzel-VF.ttf'); font-weight: 400 900; }
+@font-face { font-family: 'Great Vibes'; src: url('../assets/fonts/GreatVibes-Regular.ttf'); }
 @font-face { font-family: 'Fredoka'; src: url('../assets/fonts/Fredoka-VF.ttf'); font-weight: 300 700; }
 @font-face { font-family: 'Poppins'; src: url('../assets/fonts/Poppins-SemiBold.ttf'); font-weight: 600; }
 @font-face { font-family: 'Poppins'; src: url('../assets/fonts/Poppins-Bold.ttf'); font-weight: 700; }
