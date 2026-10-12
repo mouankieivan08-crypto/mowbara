@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Doré et Vous — Motion</title>
+<link rel="stylesheet" href="../engine/stage.css">
+<style>
+  :root {
+    --gold-1: #fff0bf; --gold-2: #f3c35c; --gold-3: #c4831f;
+    --pink: #f0457f; --teal: #1fa7a0; --cream: #fff4e2; --choc: #2a160c;
+  }
+  #bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(1100px 1100px at 50% 46%, #2b170d 0%, #170c07 45%, #080403 100%);
+  }
+  #vignette {
+    position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(130% 90% at 50% 50%, transparent 55%, rgba(0,0,0,.65) 100%);
+  }
+  .glow { width: 1300px; height: 1300px; border-radius: 50%; }
+  .rays {
+    width: 2200px; height: 2200px; border-radius: 50%;
+    background: repeating-conic-gradient(from 0deg, rgba(255, 205, 110, .16) 0deg 5deg, transparent 5deg 15deg);
+    -webkit-mask: radial-gradient(circle, #000 0%, rgba(0,0,0,.7) 25%, transparent 62%);
+            mask: radial-gradient(circle, #000 0%, rgba(0,0,0,.7) 25%, transparent 62%);
+  }
+  .dust { width: 8px; height: 8px; border-radius: 50%; background: #ffd889; box-shadow: 0 0 10px 2px rgba(255, 200, 100, .7); }
+  .spark { width: 14px; height: 14px; border-radius: 50%; }
+
+  .drip {
+    border-radius: 0 0 60px 60px;
+    background: linear-gradient(90deg, #2a1209 0%, #5b2d14 35%, #3a190b 70%, #1d0b05 100%);
+    box-shadow: 0 8px 18px rgba(0,0,0,.45);
+  }
+  .drip::after {
+    content: ''; position: absolute; left: 24%; top: 12px; width: 16%; bottom: 28%;
+    border-radius: 20px; background: linear-gradient(180deg, rgba(255,220,180,.0), rgba(255,220,180,.35));
+  }
+  #dripTop { width: 1200px; height: 120px; background: linear-gradient(180deg, #160804, #4a2411); box-shadow: 0 10px 30px rgba(0,0,0,.5); }
+
+  .t-white { color: #fff; font-family: 'Poppins'; font-weight: 800; text-shadow: 0 6px 24px rgba(0,0,0,.6); }
+  .gold, .goldfill {
+    background-image:
+      linear-gradient(110deg, transparent 42%, rgba(255,255,255,.95) 50%, transparent 58%),
+      linear-gradient(180deg, var(--gold-1) 0%, var(--gold-2) 42%, var(--gold-3) 100%);
+    background-size: 300% 100%, 100% 100%;
+    background-position: 100% 0, 0 0;
+    background-repeat: no-repeat;
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .gold, .goldwrap { filter: drop-shadow(0 8px 0 rgba(60, 25, 5, .9)) drop-shadow(0 18px 30px rgba(0,0,0,.6)); }
+  .marker { font-family: 'Permanent Marker'; }
+  .anton { font-family: 'Anton'; }
+  .script { font-family: 'Kaushan Script'; }
+
+  #h3 { font-family: 'Anton'; font-size: 196px; letter-spacing: 3px; line-height: 1.1; }
+  #h3q { font-size: 150px; color: var(--pink); text-shadow: 0 8px 0 rgba(80, 10, 30, .8), 0 16px 30px rgba(0,0,0,.6); }
+  #hero img { width: 720px; filter: drop-shadow(0 40px 50px rgba(0,0,0,.65)); }
+
+  #logoDore { font-size: 230px; line-height: 1; letter-spacing: 6px; }
+  #logoVous { font-size: 150px; color: #fff; text-shadow: 0 0 30px rgba(240, 69, 127, .55), 0 8px 18px rgba(0,0,0,.6); }
+  #heart svg { width: 90px; height: 90px; }
+
+  .brush { position: absolute; }
+  .brushText { position: absolute; left: 0; top: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+
+  .callDot { width: 34px; height: 34px; border-radius: 50%; background: var(--gold-2); box-shadow: 0 0 0 8px rgba(243, 195, 92, .25), 0 0 24px rgba(243, 195, 92, .9); }
+  .callLabel { width: 400px; white-space: normal; }
+  .callLabel b { display: block; font-family: 'Anton'; font-weight: 400; font-size: 72px; line-height: 1; letter-spacing: 1px; }
+  .callLabel span { display: block; font-family: 'Poppins'; font-weight: 600; font-size: 36px; color: var(--cream); margin-top: 6px; }
+
+  #carousel { position: absolute; inset: 0; perspective: 1700px; perspective-origin: 540px 900px; }
+  .pot img { height: 790px; filter: drop-shadow(0 34px 40px rgba(0,0,0,.7)); }
+  .card { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+  .card .row { display: flex; align-items: center; gap: 22px; }
+  .card .num {
+    width: 110px; height: 110px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-family: 'Anton'; font-size: 66px; color: #fff; box-shadow: 0 8px 24px rgba(0,0,0,.45), inset 0 -6px 0 rgba(0,0,0,.18);
+  }
+  .card .name { font-family: 'Anton'; font-size: 112px; color: #fff; letter-spacing: 2px; text-shadow: 0 8px 26px rgba(0,0,0,.6); }
+  .card .desc { font-family: 'Poppins'; font-weight: 600; font-size: 37px; color: rgba(255, 244, 226, .9); }
+  .dot { width: 18px; height: 18px; border-radius: 9px; background: rgba(255,255,255,.28); }
+
+  #price { font-size: 430px; line-height: 1; letter-spacing: 4px; }
+  #fcfa { font-size: 150px; color: #fff; letter-spacing: 18px; text-shadow: 0 10px 30px rgba(0,0,0,.6); }
+  #potBadge {
+    width: 290px; height: 290px; border-radius: 50%; background: var(--cream);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: .95;
+    box-shadow: 0 0 0 10px rgba(240, 69, 127, .9), 0 20px 50px rgba(0,0,0,.6);
+  }
+  #potBadge b { font-family: 'Anton'; font-weight: 400; font-size: 76px; color: #1b0d06; }
+  #potBadge i { font-family: 'Anton'; font-style: normal; font-size: 92px; color: var(--pink); }
+
+  .garn { width: 240px; height: 400px; display: flex; flex-direction: column; align-items: center; }
+  .garn .ph { width: 240px; height: 215px; display: flex; align-items: center; justify-content: center; }
+  .garn .ph img { max-width: 100%; max-height: 100%; filter: drop-shadow(0 16px 18px rgba(0,0,0,.6)); }
+  .garn .gn { margin-top: 14px; font-family: 'Poppins'; font-weight: 700; font-size: 30px; color: #fff; text-align: center; line-height: 1.1; white-space: normal; height: 70px; display: flex; align-items: center; }
+  .garn .gp { margin-top: 10px; padding: 6px 22px 4px; border-radius: 40px; font-family: 'Anton'; font-size: 40px; color: #fff; letter-spacing: 1px; }
+
+  #ctaChip {
+    padding: 14px 40px 10px; border-radius: 60px; font-family: 'Anton'; font-size: 58px; color: #1b0d06; letter-spacing: 2px;
+    background: linear-gradient(180deg, var(--gold-1), var(--gold-2) 50%, #d89a35);
+    box-shadow: 0 14px 40px rgba(0,0,0,.55), inset 0 -6px 0 rgba(120, 60, 10, .35);
+  }
+  #ctaPhone {
+    display: flex; align-items: center; gap: 26px; padding: 18px 54px 18px 38px; border-radius: 120px;
+    background: linear-gradient(180deg, #1c9f98, #117a74);
+    box-shadow: 0 0 0 6px rgba(255, 240, 200, .9), 0 24px 60px rgba(0,0,0,.6);
+  }
+  #ctaPhone .num { font-family: 'Anton'; font-size: 128px; color: #fff; letter-spacing: 3px; line-height: 1.05; }
+  #ctaPhone svg { width: 104px; height: 104px; }
+  #ctaCity { display: flex; align-items: center; gap: 16px; font-family: 'Poppins'; font-weight: 700; font-size: 46px; color: var(--cream); }
+  #ctaCity svg { width: 46px; height: 46px; }
+  #ctaSig { font-family: 'Kaushan Script'; font-size: 44px; color: var(--gold-2); text-align: center; line-height: 1.25; }
+  #flash { position: absolute; inset: 0; background: #fff6e0; pointer-events: none; opacity: 0; }
+</style>
+</head>
+<body>
+<div id="stage-wrap"><div id="stage">
+  <div id="bg"></div>
+  <div id="cam"></div>
+  <div id="vignette"></div>
+  <div id="flash"></div>
+</div></div>
+
+<script src="../engine/motion.js"></script>
+<script>
+const { kf, p, win, set, el, split, rng, wobble, shake, E, clamp, lerp } = M;
+const cam = document.getElementById('cam');
+const flash = document.getElementById('flash');
+
+/* ---------- Données ---------- */
+const POTS = [
+  ['01-banana-dore', 'BANANA DORÉ', 'Crêpe nature · banane fraîche · caramel', '#f5b315'],
+  ['02-oreo-cream', 'OREO CREAM', 'Crêpe cacao · crème Oreo · Oreo concassé', '#e9417a'],
+  ['03-kinder-delice', 'KINDER DÉLICE', 'Crêpe vanille · crème Kinder · Kinder Bueno', '#1c9c95'],
+  ['04-choco-vanille', 'CHOCO VANILLE', 'Crêpe cacao · crème vanille · sauce chocolat', '#7a55d6'],
+  ['05-mangue-exotic', 'MANGUE EXOTIC', 'Crêpe vanille · mangue fraîche · crème coco', '#f28c1b'],
+  ['06-banane-oreo', 'BANANE OREO', 'Crêpe nature · banane · crème Oreo', '#1c9c95'],
+  ['07-choco-kinder', 'CHOCO KINDER', 'Crêpe chocolat · crème Kinder · Kinder Bueno', '#e9417a'],
+  ['08-coco-vanille', 'COCO VANILLE', 'Crêpe vanille · crème vanille · coco grillée', '#8dba2e'],
+  ['09-mangue-caramel', 'MANGUE CARAMEL', 'Crêpe nature · mangue fraîche · caramel coulant', '#f5a015'],
+  ['10-choco-intense', 'CHOCO INTENSE', 'Crêpe cacao · crème chocolat · chocolat noir', '#7a55d6'],
+];
+const GARN = [
+  ['chocolat-fondu', 'Chocolat fondu', 500], ['kinder-bueno', 'Kinder Bueno', 500],
+  ['oreo', 'Oreo', 500], ['caramel', 'Caramel maison', 500],
+  ['banane', 'Banane fraîche', 300], ['coco', 'Coco râpée', 300], ['mangue', 'Mangue fraîche', 300],
+];
+const PHONE = '06 482 63 87';
+
+/* ---------- Utilitaires graphiques ---------- */
+function brushSVG(w, h, color, seed) {
+  const R = rng(seed), top = [], bot = [], n = 30;
+  for (let i = 0; i <= n; i++) top.push([(i / n) * w, h * 0.13 + (R() - 0.5) * h * 0.12]);
+  for (let i = n; i >= 0; i--) bot.push([(i / n) * w, h * 0.87 + (R() - 0.5) * h * 0.12]);
+  const right = [], left = [];
+  for (let k = 1; k < 7; k++) right.push([w - (k % 2 ? R() * 40 + 10 : R() * 8), h * 0.13 + (k * h * 0.74) / 7]);
+  for (let k = 6; k > 0; k--) left.push([k % 2 ? R() * 40 + 10 : R() * 8, h * 0.13 + (k * h * 0.74) / 7]);
+  const pts = [...top, ...right, ...bot, ...left];
+  let s = '';
+  for (let i = 0; i < 9; i++) {
+    const y = h * (0.18 + R() * 0.64);
+    s += `<path d="M${(R() * w * 0.25).toFixed(1)},${y.toFixed(1)}L${(w * (0.75 + R() * 0.25)).toFixed(1)},${(y + (R() - 0.5) * 8).toFixed(1)}" stroke="rgba(0,0,0,.09)" stroke-width="${(1 + R() * 4).toFixed(1)}"/>`;
+  }
+  return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}"><path d="M${pts.map((q) => q[0].toFixed(1) + ',' + q[1].toFixed(1)).join('L')}Z" fill="${color}"/>${s}</svg>`;
+}
+function brushBox(parent, w, h, color, seed, html, textStyle = '') {
+  const b = el(parent, 'brushBox', '', `width:${w}px;height:${h}px;`);
+  b.innerHTML = brushSVG(w, h, color, seed) + `<div class="brushText" style="${textStyle}">${html}</div>`;
+  b.svg = b.querySelector('svg');
+  b.txt = b.querySelector('.brushText');
+  return b;
+}
+const reveal = (b, q) => {
+  b.svg.style.clipPath = `inset(0 ${((1 - q) * 100).toFixed(2)}% 0 0)`;
+  b.txt.style.opacity = clamp((q - 0.45) / 0.4).toFixed(3);
+};
+const hexRgb = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+const mix = (a, b, q) => { const A = hexRgb(a), B = hexRgb(b); return A.map((v, i) => Math.round(lerp(v, B[i], q))); };
+const ICON_PHONE = '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#fff"/><path fill="#117a74" d="M16.6 14.2c-.8-.1-1.6-.3-2.3-.6a1 1 0 0 0-1 .2l-1 1.3a12 12 0 0 1-3.4-3.4l1.3-1a1 1 0 0 0 .2-1c-.3-.7-.5-1.5-.6-2.3a1 1 0 0 0-1-.8H6.9a1 1 0 0 0-1 1.1 12 12 0 0 0 11.1 11.1 1 1 0 0 0 1.1-1v-1.9a1 1 0 0 0-.8-1z"/></svg>';
+const ICON_PIN = '<svg viewBox="0 0 24 24"><path fill="#f0457f" d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>';
+const ICON_HEART = '<svg viewBox="0 0 24 24"><path fill="#f0457f" d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.1 0 3.4 1.1 4.3 2.4.9-1.3 2.2-2.4 4.3-2.4 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg>';
+
+/* ---------- Construction de la scène ---------- */
+const glow = el(cam, 'glow');
+const rays = el(cam, 'rays');
+
+const dust = [];
+{ const R = rng(7);
+  for (let i = 0; i < 46; i++) dust.push({ e: el(cam, 'dust'), x: R() * 1080, y: R() * 1920, v: 30 + R() * 90, s: 0.4 + R() * 1.1, ph: R() * 6.28, sw: 10 + R() * 30 }); }
+
+// S1 – coulures de chocolat + accroche
+const dripTop = el(cam, '', '', '');
+dripTop.id = 'dripTop'; dripTop.className = 'm';
+const drips = [];
+{ const R = rng(3); let x = -20;
+  while (x < 1100) { const w = 46 + R() * 70; drips.push({ e: el(cam, 'drip', '', `width:${w.toFixed(0)}px`), x: x + w / 2, w, L: 140 + R() * 420, d: R() * 0.5 }); x += w * (0.75 + R() * 0.5); } }
+const h1 = el(cam, 't-white', 'Vous avez déjà goûté', 'font-size:74px');
+const h2 = el(cam, 't-white', 'des crêpes en…', 'font-size:100px');
+const h3 = el(cam, 'goldwrap', 'TAGLIATELLES'); h3.id = 'h3';
+const h3q = el(cam, 'marker', '?!'); h3q.id = 'h3q';
+const h3L = split(h3);
+h3L.forEach((s) => s.classList.add('goldfill'));
+// Reflet qui traverse un mot découpé lettre par lettre (q : 0 → 1)
+function shineLetters(spans, q) {
+  const n = spans.length;
+  spans.forEach((s, i) => {
+    const f = q * (n + 2) - 1 - i;
+    s.style.backgroundPosition = `${(75 - 50 * f).toFixed(1)}% 0, 0 0`;
+  });
+}
+
+// Particules d'explosion (réutilisées)
+function makeBurst(n, seed, colors) {
+  const R = rng(seed), parts = [];
+  for (let i = 0; i < n; i++) {
+    const a = R() * Math.PI * 2, sp = 500 + R() * 1300;
+    const c = colors[i % colors.length];
+    parts.push({ e: el(cam, 'spark', '', `background:${c};box-shadow:0 0 14px ${c}`), vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 300, s: 0.4 + R() * 1.2, life: 0.6 + R() * 0.6 });
+  }
+  return (t, t0, x, y) => {
+    for (const q of parts) {
+      const d = t - t0;
+      if (d < 0 || d > q.life) { set(q.e, { o: 0 }); continue; }
+      const k = d / q.life;
+      set(q.e, { x: x + q.vx * d * (1 - k * 0.45), y: y + q.vy * d + 900 * d * d, s: q.s * (1 - k), o: 1 - k * k });
+    }
+  };
+}
+const burstA = makeBurst(36, 11, ['#ffd889', '#fff3c9', '#f0457f']);
+const burstB = makeBurst(48, 12, ['#ffd889', '#fff3c9', '#f3c35c', '#f0457f', '#1fa7a0']);
+const burstC = makeBurst(30, 13, ['#ffd889', '#f0457f', '#fff']);
+
+// Pot vedette
+const hero = el(cam, '', '<img src="../assets/cut/dore-hero.webp">'); hero.id = 'hero'; hero.className = 'm';
+
+// S2 – logo
+const logoDore = el(cam, 'goldwrap marker', 'DORÉ'); logoDore.id = 'logoDore';
+const doreL = split(logoDore);
+doreL.forEach((s) => s.classList.add('goldfill'));
+const logoVous = el(cam, 'script', 'et Vous'); logoVous.id = 'logoVous';
+const heart = el(cam, '', ICON_HEART); heart.id = 'heart'; heart.className = 'm';
+const tagBrush = brushBox(cam, 940, 210, '#f0457f', 21,
+  '<div style="text-align:center;line-height:1.05"><div style="font-family:Poppins;font-weight:800;font-size:54px;color:#fff">DES BOUCHÉES DE BONHEUR</div><div style="font-family:\'Kaushan Script\';font-size:58px;color:#2a160c">dans chaque pot !</div></div>');
+
+// S3 – ce qu'il y a dans le pot
+const s3a = el(cam, 'script', 'Chaque pot,', 'font-size:74px;color:#fff;text-shadow:0 6px 20px rgba(0,0,0,.6)');
+const s3b = el(cam, 'script gold', 'une explosion de saveurs !', 'font-size:80px');
+const calls = [
+  ['GARNITURES', 'gourmandes', 742, '#f3c35c'],
+  ['TAGLIATELLES', 'de crêpe', 1020, '#f3c35c'],
+  ['CRÈME', 'onctueuse', 1290, '#f3c35c'],
+].map(([a, b, y]) => ({
+  dot: el(cam, 'callDot'),
+  line: el(cam, '', '', 'height:6px;border-radius:3px;background:linear-gradient(90deg,#f3c35c,#fff0bf);box-shadow:0 0 14px rgba(243,195,92,.8);transform-origin:left center'),
+  lab: el(cam, 'callLabel', `<b class="gold">${a}</b><span>${b}</span>`),
+  y,
+}));
+
+// S4 – carrousel des 10 saveurs
+const t10 = el(cam, '', '<span class="anton gold" style="font-size:210px;letter-spacing:4px">10</span><span class="marker" style="font-size:118px;color:#fff;margin-left:22px;text-shadow:0 8px 24px rgba(0,0,0,.6)">SAVEURS</span>', 'display:flex;align-items:center');
+const t10gold = t10.querySelector('.gold');
+const t10b = el(cam, 'script', 'Laquelle est votre préférée ?', 'font-size:58px;color:#f0457f;text-shadow:0 4px 16px rgba(0,0,0,.7)');
+const carousel = document.createElement('div'); carousel.id = 'carousel'; cam.appendChild(carousel);
+const pots = POTS.map(([f]) => el(carousel, 'pot', `<img src="../assets/cut/dore-${f}.webp">`));
+const cards = POTS.map(([, n, d, c], i) => el(cam, 'card',
+  `<div class="row"><div class="num" style="background:${c}">${i + 1}</div><div class="name">${n}</div></div><div class="desc">${d}</div>`));
+const dots = POTS.map(() => el(cam, 'dot'));
+
+// S5 – prix
+const prixU = brushBox(cam, 760, 170, '#f0457f', 33, '<span class="marker" style="font-size:92px;color:#fff;text-shadow:0 5px 0 rgba(0,0,0,.25)">PRIX UNIQUE</span>');
+const price = el(cam, 'anton gold', '2000'); price.id = 'price';
+const fcfa = el(cam, 'anton', 'FCFA'); fcfa.id = 'fcfa';
+const priceLine = el(cam, 't-white', 'Tous nos pots au même prix !', 'font-size:50px;font-weight:700');
+const potBadge = el(cam, '', '<b>POT</b><i>20 CM</i>'); potBadge.id = 'potBadge'; potBadge.className = 'm';
+
+// S6 – garnitures
+const gTitle = el(cam, 'marker', '<span style="color:#f0457f">+</span> GARNITURES', 'font-size:112px;color:#fff;text-shadow:0 8px 26px rgba(0,0,0,.6)');
+const gSub = el(cam, 'script gold', 'pour encore plus de plaisir', 'font-size:66px');
+const garn = GARN.map(([f, n, pr]) => el(cam, 'garn',
+  `<div class="ph"><img src="../assets/cut/g-${f}.webp"></div><div class="gn">${n}</div><div class="gp" style="background:${pr === 500 ? '#f0457f' : '#1c9c95'}">${pr} FCFA</div>`));
+const gPlay = brushBox(cam, 800, 170, '#f7c21b', 44, '<span class="marker" style="font-size:78px;color:#2a160c">À vous de jouer !</span>');
+
+// S7 – appel à l'action
+const ctaChip = el(cam, '', 'POT 20 CM · 2000 FCFA'); ctaChip.id = 'ctaChip'; ctaChip.className = 'm';
+const ctaBanner = brushBox(cam, 1000, 170, '#f0457f', 55, '<span class="marker" style="font-size:76px;color:#fff;text-shadow:0 5px 0 rgba(0,0,0,.2)">COMMANDEZ MAINTENANT !</span>');
+ctaBanner.querySelector('.marker').style.fontSize = '64px';
+const ctaPhone = el(cam, '', `${ICON_PHONE}<span class="num">${PHONE}</span>`); ctaPhone.id = 'ctaPhone'; ctaPhone.className = 'm';
+const phoneIcon = ctaPhone.querySelector('svg');
+const ctaCity = el(cam, '', `${ICON_PIN}<span>Brazzaville · Congo</span>`); ctaCity.id = 'ctaCity'; ctaCity.className = 'm';
+const ctaSig = el(cam, '', 'Doré et Vous, bien plus qu’une crêperie,<br>une signature de plaisir !'); ctaSig.id = 'ctaSig'; ctaSig.className = 'm';
+
+/* ---------- Rendu ---------- */
+const BEAT = 0.5; // 120 BPM
+
+function render(t) {
+  // Caméra : battement sur le tempo + secousses
+  const groove = (t > 2.0 && t < 17.5) || (t > 18.0 && t < 28.6);
+  const bf = (t / BEAT) % 1;
+  const bump = groove ? Math.exp(-bf * 7) * 0.011 : 0;
+  let sx = 0, sy = 0, sr = 0;
+  for (const [t0, d, a] of [[0.8, 0.4, 26], [2.6, 0.3, 14], [18.0, 0.35, 22], [19.0, 0.45, 30], [25.1, 0.3, 14]]) {
+    const [a1, b1, c1] = shake(t, t0, d, a); sx += a1; sy += b1; sr += c1;
+  }
+  const zoom = 1 + bump + kf(t, [0, 0.04], [2.0, 0], [8, 0], [17.9, 0.03, 'linear'], [18.0, 0]);
+  cam.style.transform = `translate(${sx.toFixed(2)}px,${sy.toFixed(2)}px) rotate(${sr.toFixed(3)}deg) scale(${zoom.toFixed(4)})`;
+
+  // Flash
+  const fl = Math.max(kf(t, [0.78, 0], [0.8, 0.5], [1.0, 0]), kf(t, [17.98, 0], [18.0, 0.85], [18.3, 0]), kf(t, [18.98, 0], [19.0, 0.55], [19.3, 0]));
+  flash.style.opacity = fl.toFixed(3);
+
+  // Lueur et rayons
+  let gc = [243, 170, 70], go = kf(t, [1.8, 0], [2.6, 0.55], [7.6, 0.55], [8.0, 0.5]);
+  if (t >= 8 && t < 18.2) {
+    const c = clamp(t - 8, 0, 9.999), i = Math.floor(c), q = E.inOutCubic(clamp((c - i) / 0.38));
+    gc = mix(POTS[Math.max(i - 1, 0)][3], POTS[i][3], i === 0 ? 1 : q);
+  }
+  if (t >= 18.0) go = kf(t, [18, 0.5], [21.3, 0.5], [21.6, 0.3], [24.4, 0.3], [25, 0.55]);
+  glow.style.background = `radial-gradient(circle, rgba(${gc.join(',')},${go.toFixed(3)}) 0%, rgba(${gc.join(',')},0) 62%)`;
+  set(glow, { x: 540, y: t < 18 ? 1000 : t < 24.5 ? 800 : 780, s: 1 + bump * 3 });
+  const rayO = Math.max(win(t, 2.3, 6.1, 0.5, 0.3), win(t, 18.0, 21.5, 0.2, 0.3) * 1.2, win(t, 24.8, 30, 0.5, 0) * 0.9);
+  set(rays, { x: 540, y: t < 18 ? 1040 : t < 24.5 ? 800 : 780, r: t * 9, o: rayO, s: 1 + bump * 2 });
+
+  // Poussière d'or
+  for (const d of dust) {
+    const y = ((d.y - t * d.v) % 2000 + 2000) % 2000 - 40;
+    set(d.e, { x: d.x + Math.sin(t * 0.8 + d.ph) * d.sw, y, s: d.s, o: (0.35 + 0.65 * Math.abs(Math.sin(t * 1.7 + d.ph))) * kf(t, [0, 0.3], [2, 1]) });
+  }
+
+  /* S1 — accroche */
+  const dripOut = kf(t, [1.9, 0], [2.35, -700, 'inCubic']);
+  set(dripTop, { x: 540, y: 40 + dripOut, o: t < 2.4 ? 1 : 0 });
+  for (const d of drips) {
+    const L = d.L * E.outCubic(p(t, 0.05 + d.d, 1.4)) + 40;
+    d.e.style.height = L.toFixed(1) + 'px';
+    set(d.e, { x: d.x, y: 90 + L / 2 + dripOut, o: t < 2.4 ? 1 : 0 });
+  }
+  const s1out = kf(t, [1.85, 0], [2.25, 1, 'inCubic']);
+  set(h1, { x: 540, y: kf(t, [0, 860], [0.35, 760, 'outBack']) - s1out * 500, o: kf(t, [0, 0], [0.25, 1]) * (1 - s1out), blur: s1out * 10 });
+  set(h2, { x: 540, y: kf(t, [0.3, 950], [0.65, 870, 'outBack']) - s1out * 500, o: kf(t, [0.3, 0], [0.5, 1]) * (1 - s1out), blur: s1out * 10 });
+  h3L.forEach((s, i) => {
+    const q = p(t, 0.8 + i * 0.025, 0.4, 'outBackStrong');
+    s.style.transform = `translateY(${((1 - q) * -140).toFixed(1)}px) scale(${(0.4 + 0.6 * q).toFixed(3)})`;
+    s.style.opacity = clamp((t - 0.8 - i * 0.025) / 0.08).toFixed(2);
+  });
+  shineLetters(h3L, kf(t, [1.1, 0], [1.8, 1, 'linear']));
+  set(h3, { x: 540, y: 1060 - s1out * 500, s: kf(t, [0.8, 1.35], [1.1, 1, 'outBack']) + s1out * 0.6, o: t > 0.78 ? 1 - s1out : 0, blur: s1out * 14 });
+  set(h3q, { x: 905, y: 1215 - s1out * 500, s: kf(t, [1.15, 0], [1.4, 1, 'outBackStrong']), r: 12 + Math.sin(t * 9) * 3, o: t > 1.15 ? 1 - s1out : 0 });
+  if (t < 10) burstA(t, 0.82, 540, 1060); else burstA(t, 25.78, 540, 1430);
+
+  /* Pot vedette */
+  const floatY = Math.sin(t * 2.2) * 10, floatR = wobble(t, 2, 0.6) * 1.6;
+  let hx = 540, hy, hs, hr, ho = 1;
+  if (t < 8.2) {
+    hy = kf(t, [2.0, 2400], [2.6, 1080, 'outBack'], [6.0, 1080], [6.5, 1010, 'inOutCubic']);
+    hx = kf(t, [6.0, 540], [6.5, 350, 'inOutCubic'], [7.85, 350], [8.2, -520, 'inBack']);
+    hs = kf(t, [2.0, 0.6], [2.6, 1, 'outBack'], [6.0, 1], [6.5, 0.9, 'inOutCubic']);
+    hr = kf(t, [2.0, -16], [2.7, 0, 'outBack'], [7.85, 0], [8.2, -25, 'inCubic']) + floatR;
+    ho = t < 1.98 ? 0 : 1;
+  } else {
+    hy = kf(t, [24.5, 2400], [25.1, 780, 'outBack']);
+    hs = 0.72; hr = kf(t, [24.5, 14], [25.2, 0, 'outBack']) + floatR;
+    ho = t < 24.48 ? 0 : 1;
+  }
+  set(hero, { x: hx, y: hy + floatY, s: hs * (1 + bump), r: hr, o: ho });
+
+  /* S2 — logo */
+  const s2out = p(t, 5.85, 0.35, 'inCubic');
+  const ctaIn = t >= 24.5;
+  doreL.forEach((s, i) => {
+    const q = ctaIn ? 1 : p(t, 2.65 + i * 0.1, 0.45, 'outBack');
+    s.style.transform = `translateY(${((1 - q) * -260).toFixed(1)}px) rotate(${((1 - q) * (i % 2 ? 18 : -18)).toFixed(1)}deg)`;
+    s.style.opacity = clamp(q * 3).toFixed(2);
+  });
+  shineLetters(doreL, ctaIn ? kf(t, [26.3, 0], [27.1, 1, 'linear']) : kf(t, [3.3, 0], [4.1, 1, 'linear']));
+  if (!ctaIn) {
+    set(logoDore, { x: 540, y: 330 - s2out * 420, o: t > 2.6 ? 1 - s2out : 0 });
+    const v = p(t, 3.1, 0.45, 'outCubic');
+    logoVous.style.clipPath = `inset(-20% ${((1 - v) * 100).toFixed(1)}% -20% 0)`;
+    set(logoVous, { x: 560, y: 505 - s2out * 420, r: -6, o: t > 3.1 ? 1 - s2out : 0 });
+    set(heart, { x: 845, y: 470 - s2out * 420, s: kf(t, [3.55, 0], [3.85, 1, 'outBackStrong']) * (1 + bump * 6), r: 12, o: t > 3.55 ? 1 - s2out : 0 });
+  } else {
+    const q = p(t, 24.6, 0.5, 'outBack');
+    set(logoDore, { x: 540, y: lerp(-200, 185, q), s: 0.62, o: 1 });
+    logoVous.style.clipPath = 'none';
+    set(logoVous, { x: 560, y: lerp(-100, 297, q), s: 0.62, r: -6, o: 1 });
+    set(heart, { x: 737, y: lerp(-120, 275, q), s: 0.62 * (1 + bump * 6), r: 12, o: 1 });
+  }
+  reveal(tagBrush, p(t, 3.8, 0.4, 'outCubic'));
+  set(tagBrush, { x: 540, y: 1660 + s2out * 400, r: -2, o: t > 3.8 ? 1 - s2out : 0 });
+  burstC(t, 3.62, 845, 470);
+
+  /* S3 — dans le pot */
+  const s3o = win(t, 6.0, 7.95, 0.35, 0.25);
+  set(s3a, { x: 540, y: kf(t, [6.0, 230], [6.4, 300, 'outBack']), o: s3o });
+  set(s3b, { x: 540, y: kf(t, [6.1, 330], [6.5, 410, 'outBack']), o: s3o });
+  calls.forEach((c, i) => {
+    const t0 = 6.35 + i * 0.4;
+    const ln = p(t, t0 + 0.08, 0.3, 'outCubic');
+    const o = t >= t0 && t < 7.95 ? 1 - p(t, 7.7, 0.25) : 0;
+    const dx = 350 + [70, 120, 60][i];
+    set(c.dot, { x: dx, y: c.y, s: kf(t, [t0, 0], [t0 + 0.25, 1, 'outBackStrong']) * (1 + 0.15 * Math.sin(t * 8)), o });
+    c.line.style.width = (ln * (640 - dx - 10)).toFixed(1) + 'px';
+    set(c.line, { x: dx + 10 + (ln * (640 - dx - 10)) / 2, y: c.y, o });
+    set(c.lab, { x: 852, y: c.y + 6, o: o * clamp((t - t0 - 0.2) / 0.2), sx: 1, s: kf(t, [t0 + 0.2, 0.7], [t0 + 0.5, 1, 'outBack']) });
+  });
+
+  /* S4 — carrousel */
+  const carO = win(t, 7.95, 18.25, 0.2, 0.25);
+  set(t10, { x: 540, y: kf(t, [7.9, 120], [8.3, 250, 'outBack']), s: kf(t, [7.9, 1.6], [8.3, 1, 'outBack']), o: carO });
+  set(t10b, { x: 540, y: 395, o: carO * clamp((t - 8.35) / 0.3) });
+  t10gold.style.backgroundPosition = `${kf((t - 8.4) % 3, [0, 110], [0.8, -20, 'linear']).toFixed(1)}% 0, 0 0`;
+  let c = -1;
+  if (t >= 8) { const k = Math.min(t - 8, 9.999), i = Math.floor(k); c = i - 1 + E.inOutCubic(clamp((k - i) / 0.38)); }
+  const exitQ = p(t, 18.0, 0.3, 'inCubic');
+  pots.forEach((e, j) => {
+    const off = j - c, a = Math.abs(off);
+    const o = (a <= 1 ? 1 - 0.5 * a : Math.max(0, 0.5 - (a - 1) * 0.5)) * carO;
+    e.style.zIndex = String(100 - Math.round(a * 10));
+    const pop = a < 0.5 ? bump * 2.5 : 0;
+    set(e, { x: 540 + off * 560, y: 920 + Math.sin(t * 2.4 + j) * 8 - exitQ * 200, s: (1 - 0.34 * Math.min(a, 2) + pop) * (1 + exitQ * 0.4), ry: -off * 32, o: o * (1 - exitQ), blur: Math.min(a, 1.5) * 5 + exitQ * 12 });
+  });
+  cards.forEach((e, i) => {
+    const t0 = 8.0 + i + 0.1, t1 = i === 9 ? 18.05 : 9.0 + i;
+    const inQ = p(t, t0, 0.32, 'outBack');
+    const outQ = p(t, t1 - 0.12, 0.12, 'inCubic');
+    set(e, { x: 540, y: 1475 + (1 - inQ) * 60 - outQ * 40, s: 0.85 + 0.15 * inQ, o: t >= t0 && t <= t1 ? Math.min(1, inQ * 2) * (1 - outQ) : 0 });
+  });
+  dots.forEach((d, i) => {
+    const act = clamp(1 - Math.abs(i - c));
+    d.style.width = (18 + act * 40).toFixed(1) + 'px';
+    d.style.background = act > 0.5 ? '#f3c35c' : 'rgba(255,255,255,.28)';
+    set(d, { x: 540 + (i - 4.5) * 44 + (i - c > 0 ? 20 : i - c < 0 ? -20 : 0) * Math.min(1, Math.abs(i - c)), y: 1640, o: carO });
+  });
+
+  /* S5 — prix */
+  const s5o = win(t, 18.05, 21.55, 0.15, 0.3);
+  reveal(prixU, p(t, 18.1, 0.3, 'outCubic'));
+  set(prixU, { x: 540, y: 420, r: -3, s: kf(t, [18.1, 1.2], [18.4, 1, 'outBack']), o: s5o });
+  const cnt = p(t, 18.25, 0.75, 'outCubic');
+  price.textContent = String(Math.round((2000 * cnt) / 50) * 50);
+  price.style.backgroundPosition = `${kf(t, [19.2, 110], [20.0, -20, 'linear']).toFixed(1)}% 0, 0 0`;
+  set(price, { x: 540, y: 800, s: kf(t, [18.2, 0.5], [18.45, 1, 'outBack'], [18.95, 1], [19.0, 1.18], [19.3, 1, 'outBack']) * (1 + bump * 2), o: s5o });
+  burstB(t, 19.0, 540, 800);
+  set(fcfa, { x: 540, y: kf(t, [19.05, 1180], [19.35, 1090, 'outBack']), o: s5o * clamp((t - 19.05) / 0.15) });
+  set(priceLine, { x: 540, y: 1240, o: s5o * clamp((t - 19.7) / 0.25), s: kf(t, [19.7, 0.8], [20.0, 1, 'outBack']) });
+  set(potBadge, { x: 540, y: 1470, s: kf(t, [19.4, 0], [19.75, 1, 'outBackStrong']) * (1 + bump * 3), r: kf(t, [19.4, -40], [19.8, -8, 'outBack']) + Math.sin(t * 2) * 3, o: s5o * (t > 19.4 ? 1 : 0) });
+
+  /* S6 — garnitures */
+  const s6o = win(t, 21.5, 24.55, 0.25, 0.3);
+  set(gTitle, { x: 540, y: kf(t, [21.5, 200], [21.85, 300, 'outBack']), o: s6o });
+  set(gSub, { x: 540, y: 425, o: s6o * clamp((t - 21.7) / 0.25) });
+  garn.forEach((g, i) => {
+    const row2 = i >= 4, k = row2 ? i - 4 : i;
+    const x = row2 ? 270 + k * 270 : 135 + k * 270, y = row2 ? 1180 : 760;
+    const t0 = 21.75 + i * 0.12;
+    set(g, { x, y: y + Math.sin(t * 2.6 + i) * 6, s: kf(t, [t0, 0], [t0 + 0.35, 1, 'outBackStrong']), r: kf(t, [t0, i % 2 ? 20 : -20], [t0 + 0.4, 0, 'outBack']), o: s6o * (t > t0 ? 1 : 0) });
+  });
+  reveal(gPlay, p(t, 23.2, 0.35, 'outCubic'));
+  set(gPlay, { x: 540, y: 1560, r: -3, s: 1 + bump * 2, o: s6o });
+
+  /* S7 — appel à l'action */
+  set(ctaChip, { x: 540, y: 1135, s: kf(t, [25.2, 0], [25.5, 1, 'outBackStrong']), o: t > 25.2 ? 1 : 0 });
+  reveal(ctaBanner, p(t, 25.45, 0.35, 'outCubic'));
+  set(ctaBanner, { x: 540, y: 1268, r: -2.5, s: 1 + bump * 1.5, o: t > 25.45 ? 1 : 0 });
+  const ring = t > 26.2 ? Math.sin(t * 60) * 12 * Math.max(0, Math.sin(((t - 26.2) * Math.PI) / 1.0)) ** 8 : 0;
+  phoneIcon.style.transform = `rotate(${ring.toFixed(2)}deg)`;
+  set(ctaPhone, { x: 540, y: 1432, s: kf(t, [25.75, 0.3], [26.1, 1, 'outBackStrong']) * (1 + bump * 2.2), o: t > 25.75 ? clamp((t - 25.75) / 0.1) : 0 });
+  set(ctaCity, { x: 540, y: kf(t, [26.15, 1610], [26.45, 1580, 'outBack']), o: clamp((t - 26.15) / 0.2) });
+  set(ctaSig, { x: 540, y: 1690, o: clamp((t - 26.6) / 0.4) * 0.95 });
+}
+
+M.run({
+  duration: 29.5,
+  render,
+  audio: '../output/dore-et-vous.wav',
+  music: { style: 'dore', bpm: 120, cover: 28.5, sections: [[0, 'intro'], [2.0, 'full'], [17.5, 'break'], [18.0, 'full'], [28.0, 'outro']] },
+  cues: [
+    [0.05, 'whoosh'], [0.35, 'pop'], [0.8, 'impact'], [1.9, 'whoosh'], [2.05, 'whoosh_low'], [2.6, 'thud'],
+    [2.65, 'pop'], [2.75, 'pop'], [2.85, 'pop'], [2.95, 'pop'], [3.1, 'swish'], [3.6, 'sparkle'], [3.8, 'swish'],
+    [5.95, 'whoosh'], [6.35, 'pop'], [6.75, 'pop'], [7.15, 'pop'], [7.85, 'whoosh'], [8.0, 'thud'],
+    ...Array.from({ length: 10 }, (_, i) => [8.02 + i, 'swish']),
+    [17.4, 'riser'], [18.0, 'impact'], [18.25, 'count'], [19.0, 'impact'], [19.0, 'sparkle'], [19.4, 'pop'], [19.7, 'swish'],
+    [21.45, 'whoosh'], ...Array.from({ length: 7 }, (_, i) => [21.75 + i * 0.12, 'pop']), [23.2, 'swish'],
+    [24.45, 'whoosh_low'], [25.1, 'thud'], [25.2, 'pop'], [25.45, 'swish'], [25.75, 'impact_soft'], [26.2, 'ring'], [28.0, 'end'],
+  ].map(([t, sfx]) => ({ t, sfx })),
+});
+</script>
+</body>
+</html>

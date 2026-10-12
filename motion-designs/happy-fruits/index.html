@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Happy Fruits — Motion</title>
+<link rel="stylesheet" href="../engine/stage.css">
+<style>
+  :root {
+    --cream: #fff8ec; --green: #1e6b2e; --green-2: #3e9b35; --leaf: #7bc043;
+    --orange: #ff8a00; --orange-2: #ffb52e; --yellow: #ffd23f; --ink: #1b3a20;
+  }
+  #bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(700px 700px at 95% 8%, rgba(255, 181, 46, .35), transparent 70%),
+      radial-gradient(800px 800px at 0% 92%, rgba(123, 192, 67, .3), transparent 70%),
+      radial-gradient(900px 900px at 50% 50%, #fffdf7, var(--cream) 70%);
+  }
+  #dull {
+    position: absolute; inset: 0;
+    background: radial-gradient(1000px 1000px at 50% 45%, #e9e7e2, #c9c6c0);
+  }
+  .fred { font-family: 'Fredoka'; font-weight: 700; }
+  .pop { font-family: 'Poppins'; }
+
+  #clock svg { width: 380px; height: 380px; filter: drop-shadow(0 18px 30px rgba(0,0,0,.18)); }
+  #battery svg { width: 300px; height: 140px; }
+
+  #wipeRing { width: 100px; height: 100px; border-radius: 50%; border: 60px solid var(--orange); }
+  .drop svg { width: 46px; height: 64px; }
+
+  #logo img { width: 780px; border-radius: 50%; box-shadow: 0 30px 70px rgba(30, 107, 46, .25), 0 0 0 14px rgba(255,255,255,.7); }
+  .leafEl svg { width: 170px; height: 170px; filter: drop-shadow(0 10px 14px rgba(0,0,0,.15)); }
+  .dice { border-radius: 22%; box-shadow: inset -6px -8px 0 rgba(0,0,0,.08), inset 6px 6px 0 rgba(255,255,255,.35); }
+
+  .cup img { height: 680px; filter: drop-shadow(0 30px 34px rgba(60, 40, 0, .28)); }
+  .cupDisc { width: 820px; height: 820px; border-radius: 50%; }
+  .pill {
+    padding: 14px 52px 18px; border-radius: 80px; color: #fff; font-family: 'Fredoka'; font-weight: 700; font-size: 82px; line-height: 1.05;
+    box-shadow: 0 16px 34px rgba(0,0,0,.18), inset 0 -8px 0 rgba(0,0,0,.12);
+    text-shadow: 0 4px 0 rgba(0,0,0,.2);
+  }
+  .ingr { display: flex; align-items: center; gap: 12px; font-family: 'Poppins'; font-weight: 700; font-size: 42px; color: var(--ink); }
+  .ingr .chip { display: inline-block; padding: 8px 26px 6px; border-radius: 40px; background: #fff; box-shadow: 0 8px 20px rgba(0,0,0,.08); border: 3px solid rgba(30,107,46,.12); }
+  .ingr .plus { display: inline-block; color: var(--orange); font-family: 'Fredoka'; font-size: 54px; }
+  .desc { font-family: 'Poppins'; font-weight: 600; font-size: 38px; color: #5c6b5a; }
+  .pdot { width: 20px; height: 20px; border-radius: 10px; background: rgba(30,107,46,.2); }
+
+  #panel { width: 1080px; height: 2400px; background: radial-gradient(1000px 1100px at 50% 40%, #2a8a3c, #1e6b2e 60%, #155424); }
+  #panel svg { position: absolute; left: 0; top: -118px; width: 1080px; height: 120px; }
+  .sector { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .sector .ic { width: 196px; height: 196px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 16px 34px rgba(0,0,0,.22), inset 0 -8px 0 rgba(30,107,46,.12); }
+  .sector .ic svg { width: 110px; height: 110px; }
+  .sector .lb { font-family: 'Poppins'; font-weight: 700; font-size: 32px; color: #fff; text-align: center; line-height: 1.15; white-space: pre; }
+  #checkCard { width: 960px; padding: 34px 44px; border-radius: 40px; background: #fff; box-shadow: 0 30px 70px rgba(0,0,0,.3); }
+  .chk { display: flex; align-items: center; gap: 26px; height: 92px; font-family: 'Poppins'; font-weight: 700; font-size: 41px; color: var(--ink); }
+  .chk svg { width: 64px; height: 64px; flex: none; }
+
+  .badge { display: flex; flex-direction: column; align-items: center; gap: 22px; }
+  .badge .ic { width: 250px; height: 250px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 10px var(--c), 0 22px 44px rgba(0,0,0,.14); }
+  .badge .ic svg { width: 140px; height: 140px; }
+  .badge .lb { font-family: 'Fredoka'; font-weight: 600; font-size: 42px; color: var(--green); text-align: center; line-height: 1.1; white-space: pre; }
+  #slogan { font-family: 'Pacifico'; font-size: 104px; color: var(--green); text-shadow: 0 6px 0 rgba(255, 181, 46, .55); }
+  #swoosh svg { width: 760px; height: 60px; }
+
+  #btn {
+    padding: 26px 66px 30px; border-radius: 90px; font-family: 'Fredoka'; font-weight: 700; font-size: 70px; color: #fff;
+    background: linear-gradient(180deg, #ffb52e, #ff8a00 55%, #f06a00);
+    box-shadow: 0 22px 44px rgba(240, 106, 0, .4), inset 0 -10px 0 rgba(150, 50, 0, .25), inset 0 6px 0 rgba(255,255,255,.35);
+  }
+  #ripple { width: 120px; height: 120px; border-radius: 50%; border: 10px solid rgba(255, 138, 0, .8); }
+  #contact { display: flex; align-items: center; gap: 18px; font-family: 'Poppins'; font-weight: 700; font-size: 46px; color: var(--ink); }
+  #contact svg { width: 60px; height: 60px; }
+  #contact.phone { font-family: 'Fredoka'; font-size: 96px; color: var(--green); }
+  #contact.phone svg { width: 90px; height: 90px; }
+  #zone { display: flex; align-items: center; gap: 12px; font-family: 'Poppins'; font-weight: 600; font-size: 40px; color: #5c6b5a; }
+  #zone svg { width: 44px; height: 44px; }
+  #flash { position: absolute; inset: 0; background: #fff; pointer-events: none; opacity: 0; }
+</style>
+</head>
+<body>
+<div id="stage-wrap"><div id="stage">
+  <div id="bg"></div>
+  <div id="cam"></div>
+  <div id="flash"></div>
+</div></div>
+
+<script src="../engine/motion.js"></script>
+<script>
+/* ===================== À PERSONNALISER ===================== */
+const CONFIG = {
+  phone: '',                                   // ex. '06 123 45 67' → s'affiche en grand à la fin
+  contact: 'Écrivez-nous en message privé',    // affiché si aucun numéro n'est renseigné
+  zone: 'Congo-Brazzaville',
+};
+/* =========================================================== */
+
+const { kf, p, win, set, el, split, rng, wobble, shake, E, clamp, lerp } = M;
+const cam = document.getElementById('cam');
+const flash = document.getElementById('flash');
+
+const COMBOS = [
+  ['tropical-sunshine', 'Tropical Sunshine', ['Mangue', 'Ananas', 'Orange'], 'Le goût du soleil en bouche !', '#ff8a1f'],
+  ['douceur-gourmande', 'Douceur Gourmande', ['Banane', 'Fraise', 'Mangue'], 'Doux et sucré, parfait pour tous.', '#e8457a'],
+  ['energie-tropicale', 'Énergie Tropicale', ['Ananas', 'Passion', 'Orange'], 'Une explosion de fraîcheur et de peps !', '#ec9a00'],
+  ['vitalite-naturelle', 'Vitalité Naturelle', ['Papaye', 'Orange', 'Citron vert'], 'Acidulé, frais et plein de vitamines !', '#5db233'],
+  ['equilibre-parfait', 'Équilibre Parfait', ['Mangue', 'Banane', 'Avocat'], 'Crémeux, doux et ultra nourrissant.', '#1f7a3a'],
+  ['fraicheur-exotique', 'Fraîcheur Exotique', ['Pastèque', 'Ananas', 'Mangue'], 'Léger, rafraîchissant et tellement bon !', '#e83b4f'],
+];
+
+/* ---------- Icônes ---------- */
+const sv = (body, color = '#1e6b2e', w = 1.9) =>
+  `<svg viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round">${body}</svg>`;
+const IC = {
+  office: sv('<rect x="3" y="7.5" width="18" height="12.5" rx="2.2"/><path d="M8.5 7.5V5.5a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v2M3 13h18M11 13v1.6h2V13"/>'),
+  company: sv('<path d="M4 21V5.2A2.2 2.2 0 0 1 6.2 3h7.6A2.2 2.2 0 0 1 16 5.2V21M16 9h2.2A1.8 1.8 0 0 1 20 10.8V21M2.5 21h19M7.5 7h1.5M11 7h1.5M7.5 11h1.5M11 11h1.5M7.5 15h1.5M11 15h1.5"/>'),
+  school: sv('<path d="M2 9.2 12 4.5l10 4.7-10 4.8z"/><path d="M6 11.3v4.6c0 1.6 2.7 3.1 6 3.1s6-1.5 6-3.1v-4.6M22 9.2v5.6"/>'),
+  site: sv('<path d="M4.5 16.5a7.5 7.5 0 0 1 15 0"/><path d="M2.5 16.5h19v2.6h-19zM10 9.6V6.5h4v3.1M12 6.5v4"/>'),
+  ngo: sv('<path d="M12 20s-7.2-4.4-7.2-10A4.1 4.1 0 0 1 12 7.4 4.1 4.1 0 0 1 19.2 10c0 5.6-7.2 10-7.2 10z"/>'),
+  leaf: sv('<path d="M5 19.5C5 11 10.5 4.5 20 4.5c0 9.5-6.2 15.3-14 15.3"/><path d="M5 19.5 14 10.5"/>', '#3e9b35', 2),
+  noflask: sv('<path d="M9.2 3.5h5.6M10.2 3.5v5.6L6 16.4a2.2 2.2 0 0 0 1.9 3.3h8.2a2.2 2.2 0 0 0 1.9-3.3l-4.2-7.3V3.5"/>', '#1e6b2e', 1.8) .replace('</svg>', '<circle cx="12" cy="12" r="10.6" stroke="#e83b4f" stroke-width="1.8"/><path d="M4.6 4.6 19.4 19.4" stroke="#e83b4f" stroke-width="1.8"/></svg>'),
+  pin: sv('<path d="M12 21.5s6.8-6.6 6.8-11.6a6.8 6.8 0 0 0-13.6 0c0 5 6.8 11.6 6.8 11.6z"/><path d="M9.6 10.6c0-2 1.2-3.3 3.6-3.4 0 2.3-1.3 3.5-3.6 3.4zM9.6 10.6l2-1.6"/>', '#ff8a00', 1.9),
+  mail: sv('<rect x="2.8" y="5" width="18.4" height="14" rx="2.4"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/>', '#ff8a00', 2),
+  phone: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#ff8a00"/><path fill="#fff" d="M16.6 14.2c-.8-.1-1.6-.3-2.3-.6a1 1 0 0 0-1 .2l-1 1.3a12 12 0 0 1-3.4-3.4l1.3-1a1 1 0 0 0 .2-1c-.3-.7-.5-1.5-.6-2.3a1 1 0 0 0-1-.8H6.9a1 1 0 0 0-1 1.1 12 12 0 0 0 11.1 11.1 1 1 0 0 0 1.1-1v-1.9a1 1 0 0 0-.8-1z"/></svg>',
+  pinSmall: sv('<path d="M12 21.5s6.8-6.6 6.8-11.6a6.8 6.8 0 0 0-13.6 0c0 5 6.8 11.6 6.8 11.6z"/><circle cx="12" cy="9.9" r="2.4"/>', '#e83b4f', 2),
+};
+const LEAF = (c1, c2) => `<svg viewBox="0 0 100 100"><path d="M8 92C8 45 40 10 92 8c-2 52-36 84-84 84z" fill="${c1}"/><path d="M8 92C34 66 58 40 86 14" stroke="${c2}" stroke-width="4" fill="none" stroke-linecap="round"/></svg>`;
+const DROP = (c) => `<svg viewBox="0 0 46 64"><path d="M23 2C23 2 4 28 4 42a19 19 0 0 0 38 0C42 28 23 2 23 2z" fill="${c}"/><ellipse cx="15" cy="40" rx="5" ry="9" fill="rgba(255,255,255,.55)"/></svg>`;
+const CHECK = '<svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="30" fill="#ff8a00"/><path class="ck" d="M18 33l9 9 19-20" stroke="#fff" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="50" stroke-dashoffset="50"/></svg>';
+
+/* ---------- Ambiance : dés de fruits & feuilles ---------- */
+const ambient = [];
+{ const R = rng(5), cols = ['#ffb52e', '#ff8a1f', '#ffd23f', '#e8457a', '#7bc043', '#ff6f3c'];
+  const edgeX = () => (R() < 0.5 ? 20 + R() * 130 : 930 + R() * 130); // reste sur les bords pour ne pas gêner la lecture
+  for (let i = 0; i < 12; i++) {
+    const sz = 26 + R() * 40;
+    ambient.push({ e: el(cam, 'dice', '', `width:${sz}px;height:${sz}px;background:${cols[i % cols.length]}`), x: edgeX(), y: R() * 1920, v: 18 + R() * 40, r: R() * 360, vr: (R() - 0.5) * 80, ph: R() * 6, depth: R() });
+  }
+  for (let i = 0; i < 6; i++) ambient.push({ e: el(cam, 'leafEl', LEAF('#7bc043', '#4c9a2a'), 'transform-origin:center'), x: edgeX(), y: R() * 1920, v: 25 + R() * 30, r: R() * 360, vr: (R() - 0.5) * 50, ph: R() * 6, depth: R(), leaf: true });
+}
+
+/* ---------- S1 : accroche « grise » ---------- */
+const dull = el(cam, '', ''); dull.id = 'dull'; dull.className = '';
+const clock = el(cam, '', `<svg viewBox="0 0 200 200">
+  <circle cx="100" cy="100" r="90" fill="#fff" stroke="#3b3b3b" stroke-width="10"/>
+  ${Array.from({ length: 12 }, (_, i) => `<line x1="100" y1="${i % 3 ? 22 : 18}" x2="100" y2="${i % 3 ? 30 : 36}" stroke="#555" stroke-width="${i % 3 ? 4 : 7}" stroke-linecap="round" transform="rotate(${i * 30} 100 100)"/>`).join('')}
+  <line id="hh" x1="100" y1="100" x2="100" y2="58" stroke="#2b2b2b" stroke-width="10" stroke-linecap="round"/>
+  <line id="mh" x1="100" y1="100" x2="100" y2="34" stroke="#2b2b2b" stroke-width="7" stroke-linecap="round"/>
+  <line id="sh" x1="100" y1="114" x2="100" y2="30" stroke="#e04b3a" stroke-width="3.5" stroke-linecap="round"/>
+  <circle cx="100" cy="100" r="8" fill="#e04b3a"/></svg>`); clock.id = 'clock'; clock.className = 'm';
+const [hh, mh, sh] = ['hh', 'mh', 'sh'].map((id) => clock.querySelector('#' + id));
+const tenH = el(cam, 'fred', '10h00', 'font-size:150px;color:#3a3a3a');
+const h2 = el(cam, 'pop', 'Vos équipes sont déjà…', 'font-weight:800;font-size:66px;color:#444');
+const flat = el(cam, 'fred', 'À PLAT ?!', 'font-size:190px;color:#e04b3a;text-shadow:0 10px 0 rgba(120,20,10,.18)');
+const battery = el(cam, '', `<svg viewBox="0 0 150 70">
+  <rect x="4" y="6" width="128" height="58" rx="12" fill="#fff" stroke="#3b3b3b" stroke-width="7"/>
+  <rect x="134" y="24" width="12" height="22" rx="4" fill="#3b3b3b"/>
+  <rect id="lvl" x="13" y="15" width="40" height="40" rx="6" fill="#e04b3a"/>
+  <path id="bolt" d="M74 12 58 38h12l-6 20 18-28H70z" fill="#ffd23f" stroke="#1e6b2e" stroke-width="3" stroke-linejoin="round"/></svg>`); battery.id = 'battery'; battery.className = 'm';
+const lvl = battery.querySelector('#lvl'), bolt = battery.querySelector('#bolt');
+
+/* ---------- S2 : révélation ---------- */
+const wipeRing = el(cam, ''); wipeRing.id = 'wipeRing';
+function makeDrops(n, seed) {
+  const R = rng(seed), cols = ['#ff8a00', '#ffb52e', '#ffd23f', '#7bc043', '#ff6f3c'];
+  return Array.from({ length: n }, (_, i) => {
+    const a = (i / n) * Math.PI * 2 + R() * 0.4, sp = 700 + R() * 1100;
+    return { e: el(cam, 'drop', DROP(cols[i % cols.length])), vx: Math.cos(a) * sp, vy: Math.sin(a) * sp, s: 0.6 + R() * 1.1, life: 0.7 + R() * 0.5 };
+  });
+}
+function drops(list, t, t0, x, y) {
+  for (const d of list) {
+    const k = (t - t0) / d.life;
+    if (k < 0 || k > 1) { set(d.e, { o: 0 }); continue; }
+    const dt = t - t0, vx = d.vx * (1 - k * 0.5), vy = d.vy + 1400 * dt;
+    set(d.e, { x: x + d.vx * dt * (1 - k * 0.35), y: y + d.vy * dt + 700 * dt * dt, r: (Math.atan2(vy, vx) * 180) / Math.PI - 90 + 180, s: d.s * (1 - k * 0.6), o: 1 - k * k });
+  }
+}
+const dropsA = makeDrops(26, 3), dropsB = makeDrops(22, 4);
+const logo = el(cam, '', '<img src="../assets/cut/hf-logo-badge.webp">'); logo.id = 'logo'; logo.className = 'm';
+const leaves = [[-1, -1, 0], [1, -1, 1], [-1, 1, 2], [1, 1, 3]].map(([sx, sy], i) => ({ e: el(cam, 'leafEl', LEAF(i % 2 ? '#3e9b35' : '#7bc043', '#2c6e1f')), sx, sy }));
+const l1 = el(cam, 'fred', 'La pause fruitée', 'font-size:92px;color:#1e6b2e');
+const l2 = el(cam, 'fred', 'qui recharge vos équipes !', 'font-size:66px;color:#ff8a00');
+const l1w = split(l1, true), l2w = split(l2, true);
+
+/* ---------- S3/S4 : produits ---------- */
+const s3t = el(cam, 'fred', '<span style="color:#ff8a00">6</span> COMBOS', 'font-size:170px;color:#1e6b2e;letter-spacing:2px');
+const s3s = el(cam, 'pop', 'de fruits frais, prêts à déguster', 'font-weight:700;font-size:50px;color:#5c6b5a');
+const disc = el(cam, 'cupDisc');
+const disc2 = el(cam, 'cupDisc', '', 'background:rgba(255,255,255,.55);width:620px;height:620px');
+const cups = COMBOS.map(([f]) => el(cam, 'cup', `<img src="../assets/cut/hf-${f}.webp">`));
+const s4h = el(cam, 'fred', 'NOS COMBOS', 'font-size:100px;color:#1e6b2e');
+const pdots = COMBOS.map(() => el(cam, 'pdot'));
+const pills = COMBOS.map(([, n, , , c]) => el(cam, 'pill', n, `background:${c}`));
+const ingrs = COMBOS.map(([, , ing]) => {
+  const e = el(cam, 'ingr', ing.map((x) => `<span class="chip">${x}</span>`).join('<span class="plus">+</span>'));
+  e.parts = Array.from(e.children);
+  return e;
+});
+const descs = COMBOS.map(([, , , d]) => el(cam, 'desc', d));
+const GRID = [[190, 820], [540, 820], [890, 820], [190, 1240], [540, 1240], [890, 1240]];
+const T4 = (i) => 9.0 + i * 1.5; // début de chaque combo
+
+/* ---------- S5 : entreprises ---------- */
+const panel = el(cam, '', `<svg viewBox="0 0 1080 120" preserveAspectRatio="none"><path d="M0 120V60C120 10 240 10 360 50s240 70 360 30 240-90 360-40v70z" fill="#1e6b2e"/></svg>`); panel.id = 'panel'; panel.className = 'm';
+const b1 = el(cam, 'pop', 'Pensé pour vos', 'font-weight:800;font-size:64px;color:#fff');
+const b2 = el(cam, 'fred', 'ÉQUIPES', 'font-size:200px;color:#ffd23f;text-shadow:0 10px 0 rgba(0,0,0,.18)');
+const SECT = [['office', 'Bureaux &\nadministrations'], ['company', 'Entreprises'], ['school', 'Écoles &\nuniversités'], ['site', 'Chantiers'], ['ngo', 'ONG &\ninstitutions']];
+const sectors = SECT.map(([ic, lb]) => el(cam, 'sector', `<div class="ic">${IC[ic]}</div><div class="lb">${lb}</div>`));
+const SPOS = [[200, 700], [540, 700], [880, 700], [370, 1010], [710, 1010]];
+const CHK = ['Livraison régulière et ponctuelle', 'Formats individuels ou en lots', 'Commandes en gros', 'Partenariat sur le long terme'];
+const checkCard = el(cam, '', CHK.map((x) => `<div class="chk">${CHECK}<span>${x}</span></div>`).join('')); checkCard.id = 'checkCard'; checkCard.className = 'm';
+const chkRows = Array.from(checkCard.querySelectorAll('.chk'));
+
+/* ---------- S6 : engagements ---------- */
+const s6h = el(cam, 'fred', 'Nos engagements', 'font-size:96px;color:#1e6b2e');
+const BADGES = [['leaf', '100%\nnaturels', '#7bc043'], ['noflask', 'Sans\nconservateurs', '#ff8a00'], ['pin', 'Fruits de saison\ndu Congo', '#ffd23f']];
+const badges = BADGES.map(([ic, lb, c]) => el(cam, 'badge', `<div class="ic">${IC[ic]}</div><div class="lb">${lb}</div>`, `--c:${c}`));
+const slogan = el(cam, '', 'Le fruit, c’est la vie !'); slogan.id = 'slogan'; slogan.className = 'm';
+const swoosh = el(cam, '', '<svg viewBox="0 0 760 60"><path d="M10 40C200 8 520 4 750 30" stroke="#ff8a00" stroke-width="14" fill="none" stroke-linecap="round"/></svg>'); swoosh.id = 'swoosh'; swoosh.className = 'm';
+const swPath = swoosh.querySelector('path'); const swLen = 760; swPath.style.strokeDasharray = swLen;
+
+/* ---------- S7 : appel à l'action ---------- */
+const c1 = el(cam, 'pop', 'Offrez à vos équipes', 'font-weight:800;font-size:62px;color:#1e6b2e');
+const c2 = el(cam, 'fred', 'la pause qui donne la pêche !', 'font-size:68px;color:#ff8a00');
+const btn = el(cam, '', 'Demandez votre devis'); btn.id = 'btn'; btn.className = 'm';
+const ripple = el(cam, ''); ripple.id = 'ripple';
+const finger = el(cam, '', '👆', 'font-size:130px;font-family:"Noto Color Emoji"');
+const contact = el(cam, '', CONFIG.phone ? `${IC.phone}<span>${CONFIG.phone}</span>` : `${IC.mail}<span>${CONFIG.contact}</span>`); contact.id = 'contact'; contact.className = 'm' + (CONFIG.phone ? ' phone' : '');
+const zone = el(cam, '', `${IC.pinSmall}<span>${CONFIG.zone}</span>`); zone.id = 'zone'; zone.className = 'm';
+
+/* ===================== Rendu ===================== */
+const BEAT = 0.5;
+const hexRgb = (h) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+
+function render(t) {
+  const groove = (t > 3.0 && t < 17.5) || (t > 18.0 && t < 28.6);
+  const bf = (t / BEAT) % 1;
+  const bump = groove ? Math.exp(-bf * 7) * 0.01 : 0;
+  let sx = 0, sy = 0, sr = 0;
+  for (const [t0, d, a] of [[1.3, 0.35, 16], [3.0, 0.4, 22], [18.05, 0.3, 12], [25.45, 0.3, 14]]) {
+    const [a1, b1, c] = shake(t, t0, d, a); sx += a1; sy += b1; sr += c;
+  }
+  const zoom = 1 + bump + kf(t, [0, 0.05], [2.9, 0, 'linear']);
+  cam.style.transform = `translate(${sx.toFixed(2)}px,${sy.toFixed(2)}px) rotate(${sr.toFixed(3)}deg) scale(${zoom.toFixed(4)})`;
+  flash.style.opacity = Math.max(kf(t, [2.92, 0], [2.97, 0.7], [3.3, 0]), kf(t, [18.0, 0], [18.05, 0.25], [18.3, 0])).toFixed(3);
+
+  // Ambiance (cachée pendant l'accroche et sur le panneau vert)
+  const ambO = Math.min(kf(t, [3.0, 0], [3.6, 1]), 1 - win(t, 18.2, 23.4, 0.3, 0.3));
+  for (const a of ambient) {
+    const y = ((a.y - t * a.v) % 2050 + 2050) % 2050 - 60;
+    set(a.e, { x: a.x + Math.sin(t * 0.9 + a.ph) * 22, y, r: a.r + t * a.vr, s: a.leaf ? 0.45 + a.depth * 0.3 : 0.6 + a.depth * 0.45, o: ambO * (0.35 + a.depth * 0.4), blur: a.depth < 0.25 ? 3 : 0 });
+  }
+
+  /* S1 — accroche */
+  const r = kf(t, [2.9, 0], [3.45, 1300, 'inQuad']);
+  dull.style.display = r >= 1290 ? 'none' : 'block';
+  dull.style.webkitMaskImage = dull.style.maskImage = r > 0 ? `radial-gradient(circle at 540px 900px, transparent ${r}px, #000 ${r + 2}px)` : 'none';
+  set(wipeRing, { x: 540, y: 900, s: Math.max(0.01, (r * 2) / 100), o: r > 0 && r < 1290 ? 0.9 * (1 - r / 1300) : 0 });
+  wipeRing.style.borderWidth = (60 / Math.max(1, (r * 2) / 100)).toFixed(2) + 'px';
+
+  const s1out = p(t, 2.55, 0.35, 'inBack');
+  const spin = kf(t, [0, 0], [0.85, 1, 'outCubic']);
+  hh.setAttribute('transform', `rotate(${(-60 - 720 * (1 - spin)).toFixed(2)} 100 100)`);
+  mh.setAttribute('transform', `rotate(${(-8640 * (1 - spin)).toFixed(2)} 100 100)`);
+  sh.setAttribute('transform', `rotate(${(Math.floor(t / BEAT) * 6 + 6 * E.outBack(Math.min(1, bf * 5))).toFixed(2)} 100 100)`);
+  set(clock, { x: 540, y: 470 - s1out * 300, s: kf(t, [0, 0.6], [0.4, 1, 'outBack']) * (1 - s1out), o: t < 2.95 ? 1 : 0 });
+  set(tenH, { x: 540, y: 780 - s1out * 200, s: kf(t, [0.35, 0], [0.65, 1, 'outBackStrong']) * (1 - s1out), o: t > 0.35 && t < 2.95 ? 1 : 0 });
+  set(h2, { x: 540, y: kf(t, [0.9, 980], [1.15, 935, 'outBack']), o: clamp((t - 0.9) / 0.2) * (1 - s1out), s: 1 - s1out * 0.5 });
+  const sq = t < 1.3 ? 0 : Math.exp(-(t - 1.3) * 5) * Math.cos((t - 1.3) * 22);
+  set(flat, { x: 540, y: kf(t, [1.2, 860], [1.32, 1110, 'inCubic']) + sq * 20, sx: 1 + sq * 0.25, sy: 1 - sq * 0.4, o: t > 1.2 ? 1 - s1out : 0, s: 1 - s1out * 0.5 });
+  // batterie : se vide pendant l'accroche, se recharge après la révélation
+  const charge = t < 3 ? kf(t, [1.35, 0.4], [2.5, 0.07, 'outCubic']) : kf(t, [4.4, 0.07], [5.3, 1, 'inOutCubic']);
+  const col = charge < 0.5 ? [224, 75, 58] : charge < 0.85 ? [255, 181, 46] : [62, 155, 53];
+  lvl.setAttribute('width', (110 * charge).toFixed(1));
+  lvl.setAttribute('fill', `rgb(${col.join(',')})`);
+  const blink = t < 3 && t > 2.0 ? (Math.sin(t * 20) > 0 ? 1 : 0.25) : 1;
+  lvl.style.opacity = blink;
+  bolt.style.opacity = t > 4.3 ? 1 : 0;
+  const batIn = t < 3 ? win(t, 1.35, 2.95, 0.3, 0.3) : win(t, 4.2, 7.0, 0.35, 0.3);
+  set(battery, { x: 540, y: t < 3 ? 1380 : 1600, s: (t < 3 ? 1 : 0.62) * (0.6 + 0.4 * batIn) * (t > 5.3 && t < 5.6 ? 1 + 0.12 * Math.sin((t - 5.3) * Math.PI / 0.3) : 1), o: batIn });
+
+  /* S2 — logo */
+  drops(dropsA, t, 2.95, 540, 900);
+  const lgIn = p(t, 3.0, 0.55, 'outBackStrong');
+  const lgCta = p(t, 25.35, 0.55, 'outBack');
+  const lgOut = p(t, 6.85, 0.35, 'inBack');
+  if (t < 20) {
+    set(logo, { x: 540, y: 790 + Math.sin(t * 2) * 8 - lgOut * 1300, s: lgIn * (1 + bump * 1.5), r: kf(t, [3.0, -30], [3.6, 0, 'outBack']) + wobble(t, 3, 0.5) * 1.5, o: t > 3.0 ? 1 : 0 });
+  } else {
+    set(logo, { x: 540, y: lerp(-500, 520, lgCta) + Math.sin(t * 2) * 6, s: 0.72 * (1 + bump * 1.5), r: kf(t, [25.35, 25], [25.95, 0, 'outBack']), o: t > 25.35 ? 1 : 0 });
+  }
+  leaves.forEach((l, i) => {
+    const q = p(t, 3.2 + i * 0.08, 0.5, 'outBack');
+    const cta = t > 20;
+    const base = cta ? [540 + l.sx * 250, 520 + l.sy * 240] : [540 + l.sx * 330, 790 + l.sy * 320];
+    const qq = cta ? lgCta : q;
+    const out = cta ? 0 : lgOut;
+    set(l.e, { x: base[0] + l.sx * (1 - qq) * 500, y: base[1] + l.sy * (1 - qq) * 500 - out * 1300 + Math.sin(t * 2.4 + i) * 10, r: (l.sy < 0 ? (l.sx > 0 ? 0 : -90) : l.sx > 0 ? 90 : 180) + Math.sin(t * 2 + i) * 6, s: cta ? 0.6 : 0.85, o: (cta ? t > 25.35 : t > 3.2 && t < 7.3) ? 1 : 0 });
+  });
+  const lineOut = p(t, 6.8, 0.3, 'inCubic');
+  [[l1, l1w, 1310, 3.75], [l2, l2w, 1420, 4.0]].forEach(([e, ws, y, t0]) => {
+    ws.forEach((w, i) => {
+      const q = p(t, t0 + i * 0.07, 0.35, 'outBackStrong');
+      w.style.transform = `translateY(${((1 - q) * 60).toFixed(1)}px) scale(${q.toFixed(3)})`;
+      w.style.opacity = clamp(q * 2).toFixed(2);
+    });
+    set(e, { x: 540, y: y + lineOut * 600, o: t > t0 ? 1 - lineOut : 0 });
+  });
+
+  /* S3 — 6 combos en grille, puis S4 — un par un */
+  const s3o = win(t, 7.0, 8.95, 0.3, 0.2);
+  set(s3t, { x: 540, y: kf(t, [7.0, 200], [7.35, 290, 'outBack']), s: kf(t, [7.0, 1.4], [7.35, 1, 'outBack']), o: s3o });
+  set(s3s, { x: 540, y: 425, o: s3o * clamp((t - 7.25) / 0.2) });
+
+  // index actif continu
+  let act = 0;
+  if (t >= T4(0)) act = Math.min(5, Math.floor((t - T4(0)) / 1.5));
+  const swQ = t >= T4(1) - 0.05 ? p(t, T4(act) - 0.05, 0.45, 'inOutCubic') : 1;
+  const prevC = hexRgb(COMBOS[Math.max(0, act - 1)][4]), curC = hexRgb(COMBOS[act][4]);
+  const dc = swQ < 0.5 && act > 0 ? prevC : curC;
+  const discPulse = act > 0 && swQ < 1 ? 1 - 0.22 * Math.sin(Math.PI * swQ) : 1;
+  const discO = win(t, 9.0, 18.2, 0.3, 0.3);
+  disc.style.background = `radial-gradient(circle at 40% 35%, rgba(${dc.join(',')},.55), rgba(${dc.join(',')},.95))`;
+  set(disc, { x: 540, y: 880, s: discPulse * (1 + bump * 2.5) * kf(t, [9.0, 0.2], [9.4, 1, 'outBack']), o: discO });
+  set(disc2, { x: 540, y: 880, s: discPulse * (1 + bump * 1.5) * kf(t, [9.05, 0.2], [9.45, 1, 'outBack']), o: discO * 0.9 });
+  set(s4h, { x: 540, y: kf(t, [9.0, 150], [9.35, 235, 'outBack']), o: discO });
+  pdots.forEach((d, i) => {
+    const on = i === act;
+    d.style.width = on ? '62px' : '20px';
+    d.style.background = on ? COMBOS[i][4] : 'rgba(30,107,46,.2)';
+    set(d, { x: 540 + (i - 2.5) * 50 + (i > act ? 21 : i < act ? -21 : 0), y: 335, o: discO });
+  });
+
+  cups.forEach((c, i) => {
+    const g0 = 7.15 + i * 0.1;
+    let o = 0, x = GRID[i][0], y = GRID[i][1], s = 0.485, rot = 0;
+    if (t >= g0 && t < 8.85) {
+      const q = p(t, g0, 0.45, 'outBackStrong');
+      s *= q; o = 1; rot = (1 - q) * (i % 2 ? 25 : -25); y += Math.sin(t * 3 + i) * 6;
+    } else if (t >= 8.85 && t < 9.3) {
+      if (i === 0) { const q = p(t, 8.85, 0.45, 'inOutCubic'); x = lerp(GRID[0][0], 540, q); y = lerp(GRID[0][1], 880 + Math.sin(t * 2.6) * 10, q); s = lerp(0.485, 1, q); o = 1; }
+      else { const q = p(t, 8.85, 0.25, 'inBack'); s *= Math.max(0, 1 - q); o = 1 - q; }
+    }
+    if (t >= 9.3) {
+      const tin = T4(i), tout = i === 5 ? 18.0 : T4(i + 1);
+      const qi = i === 0 ? 1 : p(t, tin - 0.05, 0.5, 'outBack');
+      const qo = p(t, tout - 0.05, 0.4, 'inBack');
+      if (t >= (i === 0 ? T4(0) : tin - 0.05) && t < tout + 0.4) {
+        x = lerp(1450, 540, qi) - (i === 5 ? 0 : qo * 1000);
+        y = 880 + Math.sin(t * 2.6) * 10 + (i === 5 ? qo * 1200 : 0);
+        s = 1 + (bump * 2); rot = (1 - qi) * 22 - qo * 20; o = 1;
+      } else o = 0;
+    }
+    set(c, { x, y, s, r: rot, o });
+  });
+  COMBOS.forEach((_, i) => {
+    const t0 = T4(i) + 0.15, t1 = i === 5 ? 17.95 : T4(i + 1) - 0.08;
+    const on = t >= t0 && t < t1;
+    const q = p(t, t0, 0.35, 'outBackStrong'), qo = p(t, t1 - 0.12, 0.12);
+    set(pills[i], { x: 540, y: 1355, s: q * (1 - qo * 0.3), r: (1 - q) * -8, o: on ? 1 - qo : 0 });
+    ingrs[i].parts.forEach((pt, k) => {
+      const qq = p(t, t0 + 0.12 + k * 0.05, 0.3, 'outBack');
+      pt.style.transform = `translateY(${((1 - qq) * 40).toFixed(1)}px) scale(${qq.toFixed(3)})`;
+      pt.style.opacity = clamp(qq * 2).toFixed(2);
+    });
+    set(ingrs[i], { x: 540, y: 1485, o: on ? 1 - qo : 0 });
+    set(descs[i], { x: 540, y: kf(t, [t0 + 0.4, 1595], [t0 + 0.7, 1575, 'outCubic']), o: on ? clamp((t - t0 - 0.4) / 0.25) * (1 - qo) : 0 });
+  });
+
+  /* S5 — entreprises */
+  const pIn = p(t, 17.95, 0.45, 'outCubic'), pOut = p(t, 23.1, 0.45, 'inCubic');
+  set(panel, { x: 540, y: 960 + 120 + lerp(2100, 0, pIn) + pOut * 2200, o: t > 17.9 && t < 23.8 ? 1 : 0 });
+  const s5o = win(t, 18.2, 23.8, 0.25, 0);
+  const pdy = pOut * 2200; // le contenu part avec le panneau
+  set(b1, { x: 540, y: kf(t, [18.2, 330], [18.5, 270, 'outBack']) + pdy, o: s5o });
+  set(b2, { x: 540, y: 410 + pdy, s: kf(t, [18.3, 0.3], [18.65, 1, 'outBackStrong']) * (1 + bump * 2), o: s5o * (t > 18.3 ? 1 : 0) });
+  sectors.forEach((e, i) => {
+    const t0 = 18.55 + i * 0.12;
+    set(e, { x: SPOS[i][0], y: SPOS[i][1] + Math.sin(t * 2.5 + i) * 5 + pdy, s: kf(t, [t0, 0], [t0 + 0.4, 1, 'outBackStrong']), o: s5o * (t > t0 ? 1 : 0) });
+  });
+  set(checkCard, { x: 540, y: kf(t, [19.3, 1650], [19.65, 1420, 'outBack']) + pdy, o: s5o * clamp((t - 19.3) / 0.2) });
+  chkRows.forEach((row, i) => {
+    const t0 = 19.75 + i * 0.5;
+    const q = p(t, t0, 0.3, 'outBack');
+    row.style.opacity = (0.25 + 0.75 * clamp(q * 2)).toFixed(2);
+    row.style.transform = `translateX(${((1 - q) * 30).toFixed(1)}px)`;
+    row.querySelector('.ck').style.strokeDashoffset = (50 * (1 - p(t, t0, 0.3, 'outCubic'))).toFixed(1);
+    row.querySelector('circle').setAttribute('fill', t >= t0 ? '#ff8a00' : '#d9d9d9');
+  });
+
+  /* S6 — engagements */
+  const s6o = win(t, 23.45, 25.45, 0.2, 0.25);
+  set(s6h, { x: 540, y: kf(t, [23.4, 360], [23.75, 430, 'outBack']), o: s6o });
+  badges.forEach((b, i) => {
+    const t0 = 23.55 + i * 0.25;
+    set(b, { x: 200 + i * 340, y: 760 + Math.sin(t * 2.5 + i) * 6, s: kf(t, [t0, 0], [t0 + 0.4, 1, 'outBackStrong']) * (1 + bump * 2), r: kf(t, [t0, -30], [t0 + 0.45, 0, 'outBack']), o: s6o * (t > t0 ? 1 : 0) });
+  });
+  set(slogan, { x: 540, y: 1190, s: kf(t, [24.3, 0.6], [24.65, 1, 'outBack']), o: s6o * clamp((t - 24.3) / 0.2) });
+  swPath.style.strokeDashoffset = (swLen * (1 - p(t, 24.45, 0.4, 'outCubic'))).toFixed(1);
+  set(swoosh, { x: 540, y: 1300, o: s6o * (t > 24.45 ? 1 : 0) });
+
+  /* S7 — appel à l'action */
+  drops(dropsB, t, 25.4, 540, 520);
+  set(c1, { x: 540, y: kf(t, [25.8, 990], [26.1, 950, 'outBack']), o: clamp((t - 25.8) / 0.2) });
+  set(c2, { x: 540, y: kf(t, [26.0, 1080], [26.3, 1045, 'outBack']), o: clamp((t - 26.0) / 0.2) });
+  const press = t > 26.95 && t < 27.25 ? Math.sin(((t - 26.95) / 0.3) * Math.PI) : 0;
+  set(btn, { x: 540, y: 1225, s: kf(t, [26.35, 0], [26.7, 1, 'outBackStrong']) * (1 + bump * 3) * (1 - press * 0.07), o: t > 26.35 ? 1 : 0 });
+  const rq = p(t, 27.0, 0.55, 'outCubic');
+  set(ripple, { x: 650, y: 1240, s: 0.3 + rq * 3, o: t > 27.0 && t < 27.55 ? 1 - rq : 0 });
+  set(finger, { x: kf(t, [26.6, 900], [26.95, 690, 'outCubic']), y: kf(t, [26.6, 1500], [26.95, 1300, 'outCubic'], [27.1, 1315], [27.3, 1300]), r: -10, s: 1 - press * 0.1, o: win(t, 26.6, 28.2, 0.15, 0.3) });
+  set(contact, { x: 540, y: kf(t, [27.3, 1420], [27.6, 1385, 'outBack']), o: clamp((t - 27.3) / 0.2) });
+  set(zone, { x: 540, y: kf(t, [27.55, 1500], [27.85, 1480, 'outBack']), o: clamp((t - 27.55) / 0.2) });
+}
+
+M.run({
+  duration: 29.5,
+  render,
+  audio: '../output/happy-fruits.wav',
+  music: { style: 'fruits', bpm: 120, cover: 28.8, sections: [[0, 'intro'], [3.0, 'full'], [17.5, 'break'], [18.0, 'full'], [28.0, 'outro']] },
+  cues: [
+    [0.02, 'whoosh'], [0.35, 'pop'], [0.9, 'swish'], [1.3, 'thud'], [1.4, 'drain'], [2.35, 'riser'],
+    [2.92, 'splash'], [3.0, 'impact'], [3.05, 'pop'], [3.3, 'sparkle'], [3.75, 'swish'], [4.0, 'swish'], [4.4, 'riser'], [5.3, 'check'],
+    [6.8, 'whoosh'], ...Array.from({ length: 6 }, (_, i) => [7.15 + i * 0.1, 'pop']), [8.85, 'whoosh'],
+    ...Array.from({ length: 5 }, (_, i) => [T4(i + 1) - 0.05, 'swish']), ...Array.from({ length: 6 }, (_, i) => [T4(i) + 0.15, 'pop']),
+    [17.45, 'riser'], [17.95, 'whoosh_low'], [18.05, 'impact_soft'], ...Array.from({ length: 5 }, (_, i) => [18.55 + i * 0.12, 'pop']),
+    [19.3, 'swish'], ...Array.from({ length: 4 }, (_, i) => [19.75 + i * 0.5, 'check']),
+    [23.2, 'whoosh_low'], ...Array.from({ length: 3 }, (_, i) => [23.55 + i * 0.25, 'pop']), [24.3, 'sparkle'], [24.45, 'swish'],
+    [25.2, 'whoosh'], [25.4, 'splash'], [25.45, 'thud'], [25.8, 'swish'], [26.35, 'pop'], [27.0, 'pop'], [27.05, 'sparkle'], [27.3, 'swish'], [28.0, 'end'],
+  ].map(([t, sfx]) => ({ t, sfx })),
+});
+</script>
+</body>
+</html>

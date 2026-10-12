@@ -1,0 +1,43 @@
+@font-face { font-family: 'Anton'; src: url('../assets/fonts/Anton-Regular.ttf'); }
+@font-face { font-family: 'Permanent Marker'; src: url('../assets/fonts/PermanentMarker-Regular.ttf'); }
+@font-face { font-family: 'Kaushan Script'; src: url('../assets/fonts/KaushanScript-Regular.ttf'); }
+@font-face { font-family: 'Pacifico'; src: url('../assets/fonts/Pacifico-Regular.ttf'); }
+@font-face { font-family: 'Caveat Brush'; src: url('../assets/fonts/CaveatBrush-Regular.ttf'); }
+@font-face { font-family: 'Fredoka'; src: url('../assets/fonts/Fredoka-VF.ttf'); font-weight: 300 700; }
+@font-face { font-family: 'Poppins'; src: url('../assets/fonts/Poppins-SemiBold.ttf'); font-weight: 600; }
+@font-face { font-family: 'Poppins'; src: url('../assets/fonts/Poppins-Bold.ttf'); font-weight: 700; }
+@font-face { font-family: 'Poppins'; src: url('../assets/fonts/Poppins-ExtraBold.ttf'); font-weight: 800; }
+@font-face { font-family: 'Poppins'; src: url('../assets/fonts/Poppins-Black.ttf'); font-weight: 900; }
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: #000; overflow: hidden; }
+
+#stage {
+  position: relative;
+  width: 1080px;
+  height: 1920px;
+  overflow: hidden;
+}
+#cam { position: absolute; inset: 0; transform-origin: 540px 960px; }
+
+/* Tous les éléments animés : positionnés par leur centre via M.set() */
+.m {
+  position: absolute;
+  left: 0;
+  top: 0;
+  visibility: hidden;
+  white-space: nowrap;
+  will-change: transform, opacity;
+}
+.m img { display: block; }
+
+/* Aperçu navigateur */
+body.preview { background: #111; display: flex; flex-direction: column; align-items: center; }
+body.preview #stage-wrap { width: var(--stage-w); height: var(--stage-h); overflow: hidden; }
+#transport {
+  display: flex; gap: 12px; align-items: center; width: min(100%, 720px);
+  padding: 14px 16px; color: #ddd; font: 14px/1 system-ui, sans-serif;
+}
+#transport button { width: 40px; height: 34px; border: 0; border-radius: 8px; background: #333; color: #fff; font-size: 16px; cursor: pointer; }
+#transport input { flex: 1; }
+#transport span { width: 64px; text-align: right; font-variant-numeric: tabular-nums; }
